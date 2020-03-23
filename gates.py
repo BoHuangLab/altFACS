@@ -9,7 +9,6 @@ from matplotlib import cm
 from matplotlib.patches import Polygon
 from matplotlib import path
 
-
 def countPlot(counts: pd.DataFrame, stat='HR', **kwargs) -> plt.Figure:
     '''function to plot (and save) bar graphs comparing experiment to controls'''
     
