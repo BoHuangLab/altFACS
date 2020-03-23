@@ -9,7 +9,7 @@ from matplotlib import cm
 from matplotlib.patches import Polygon
 from matplotlib import path
         
-def contourGate(x, y, contour: int, **kwargs)->plt.Polygon:
+def getContours(x, y, contour: int, **kwargs)->plt.Polygon:
     '''function to generate and return a contour polygon for gating'''
     
     #Get **kwargs
