@@ -57,3 +57,28 @@ def getContours(x, y, contour: int, **kwargs)->plt.Polygon:
     poly = Polygon(np.column_stack([xp, yp]), edgecolor="magenta", fill=False)
     
     return poly
+
+
+def scatterGate(data: pd.DataFrame, poly: plt.Polygon, verbose=False)->pd.DataFrame:
+    '''Add boolean Scatter Gates indicating events within the input polygon.'''
+    
+    assert 'FSC-A' in data.columns
+    assert 'SSC-A' in data.columns
+    
+    ##get data coordinates
+    coords = np.array(data[['FSC-A', 'SSC-A']])
+
+    ##get polygon coordinates
+    p = path.Path(poly.get_xy())
+
+    #Detect gated events
+    data.loc[:, "Scatter Gate"] = p.contains_points(coords)
+    scatter = data[data['Scatter Gate']]
+    
+    ##Count scatter_gated_events
+    scatter_gated_events = len(scatter)
+    
+    if verbose:
+        print('Scatter gated events =',scatter_gated_events) 
+    
+    return data
