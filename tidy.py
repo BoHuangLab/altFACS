@@ -15,12 +15,15 @@ def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
     # This script should 
     
     #Get **kwargs
+    verbose           = kwargs.get('verbose', False)
+    
     #Information to be added for each file
-    filename_dict     = kwargs.get('filename_dict', None)
+    filename_info     = kwargs.get('filename_info', None)
     
     #Information relevant to each channel
     channel_name_dict = kwargs.get('channel_name_dict', None)
-    verbose           = kwargs.get('verbose', False)
+   
+    reorder_wavelengths = kwargs.get('reorder_wavelengths', True)
        
     if type(filelist)== str:
         
@@ -42,29 +45,23 @@ def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
             path = input_directory+filelist[n]
             meta, data = fcsparser.parse(path, reformat_meta=True)
 
-            #... if there is a dictionary to add info, use that
-            if (filename_dict is not None):
-
-                if verbose:
-                    print('Adding file information from dictionary')
-                    
-                for n, column in enumerate(filename_dict[file].columns):
-                    data.insert(loc=n, column=column, value = filename_dict[file].values[0][n])
-
-            else:
-                
-                if verbose:
-                    print('Indexing input file',n)
-                    
-                #Add a column to distinguish data from different files
-                data.insert(loc=0, column='File', value = n)
-
+            #Add a column to distinguish data from different files
+            data.insert(loc=0, column='File', value = n)
+            
             #Add the data to the output dataframe
             output.append(data)
             
         #Concatenate data from all files
         output = pd.concat(output)
-            
+        
+    #... if there is a DataFrame to add info, use that
+    if (filename_info is not None):
+
+        if verbose:
+            print('Adding file information from file_info')
+                    
+            output = filename_info.merge(output, how='right')
+    
     if (channel_name_dict is not None):
         
         if verbose:
@@ -72,5 +69,25 @@ def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
                 
         #Rename columns
         output.rename(columns = channel_name_dict, inplace=True)
+    
+    if reorder_wavelengths:
         
+        if verbose:
+            print('Reordering columns according to wavelength')
+            
+        #[1] Get column labels as a series
+        cols = pd.Series(output.columns)
+        
+        #[2] Get positions of wavelength labels
+        wavelengths = ['nm' in label for label in cols]
+        
+        #[3] Sort the wavelength labels
+        new_order = sorted(cols[wavelengths])
+        
+        #[4] Reorder the wavelength labels
+        cols.loc[wavelengths] = new_order
+        
+        #[5] Reorder DataFrame Columns
+        output = output.loc[:, cols]
+    
     return output
