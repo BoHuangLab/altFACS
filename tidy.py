@@ -3,6 +3,38 @@ from os.path import isfile, join
 import fcsparser
 import pandas as pd
 
+def getFileInfo(filelist, **kwargs)->pd.DataFrame():
+    '''strip some information from the input file name'''
+    
+    #Get **kwargs
+    search_list = kwargs.get('search_list', None)
+    
+    file_info = pd.DataFrame()
+    
+    #convert to lower case
+    low_files = [file.lower() for file in filelist]
+    
+    file_info['File']     = range(len(filelist))
+    file_info['Control']  = ['control'  in file for file in low_files]
+    file_info['GFP']      = ['gfp'      in file for file in low_files]
+    file_info['ALFA']     = ['alfa'     in file for file in low_files]
+    file_info['Snoop']    = ['snoop'    in file for file in low_files]
+    file_info['Halo']     = ['halo'     in file for file in low_files]
+    file_info['JF646+']   = ['jf646'    in file for file in low_files] and ['+' in file for file in low_files]
+    file_info['JF646-']   = ['jf646'    in file for file in low_files] and ['-' in file for file in low_files]
+    file_info['sfCherry'] = ['sfCherry' in file for file in low_files]
+    file_info['LP']       = ['lp'       in file for file in low_files]
+    
+    #Get the landing pad Architecture
+    file_info['Architecture'] = [[word for word in file.split() if 'LP' in word] for file in filelist]
+    
+    if search_list is not None:
+        
+        for term in search_list:
+            file_info[term] = [term.lower() in file for file in low_files]
+    
+    return file_info
+        
 def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
     '''accept a list of .fcs files and generate a tidy pandas.Dataframe'''
     
