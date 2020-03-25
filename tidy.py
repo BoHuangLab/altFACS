@@ -20,7 +20,7 @@ def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
     
     #Information relevant to each channel
     channel_name_dict = kwargs.get('channel_name_dict', None)
-    verbose           = kwargs.get('verbose', True)
+    verbose           = kwargs.get('verbose', False)
        
     if type(filelist)== str:
         
@@ -54,7 +54,7 @@ def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
             else:
                 
                 if verbose:
-                    print('Indexing input files')
+                    print('Indexing input file',n)
                     
                 #Add a column to distinguish data from different files
                 data.insert(loc=0, column='File', value = n)
@@ -62,7 +62,15 @@ def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
             #Add the data to the output dataframe
             output.append(data)
             
-            #Concatenate data from all files
-            pd.concat(output)
+        #Concatenate data from all files
+        output = pd.concat(output)
             
+    if (channel_name_dict is not None):
+        
+        if verbose:
+            print('Renaming columns according to channel_name_dict')
+                
+        #Rename columns
+        output.rename(columns = channel_name_dict, inplace=True)
+        
     return output
