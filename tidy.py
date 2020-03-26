@@ -22,7 +22,7 @@ def getFileInfo(filelist, **kwargs)->pd.DataFrame():
     file_info['Halo']     = ['halo'     in file for file in low_files]
     file_info['JF646+']   = ['jf646'    in file for file in low_files] and ['+' in file for file in low_files]
     file_info['JF646-']   = ['jf646'    in file for file in low_files] and ['-' in file for file in low_files]
-    file_info['sfCherry'] = ['sfCherry' in file for file in low_files]
+    file_info['sfCherry'] = ['sfcherry' in file for file in low_files]
     file_info['LP']       = ['lp'       in file for file in low_files]
     
     #Get the landing pad Architecture
@@ -123,3 +123,27 @@ def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
         output = output.loc[:, cols]
     
     return output
+
+## Combine classifiers
+def combineClassifiers(data, input_columns, output_column, drop=False):
+    '''Combine mutually exclusive input_columns into a single catagorical output column.'''
+    
+    data[output_column] = data[input_columns].idxmax(axis=1)
+    
+    if drop:
+        data.drop(columns=input_columns)
+        
+    return data
+
+#Fix Architectures
+def fixArchitecture(data, architcture_column):
+    '''Handle our 'landing pad' nomenclature, e.g. LP02.'''
+    
+    LP_list=list()
+    for LP in data[architcture_column]:
+        if not LP:
+            LP_list.append('LP00')
+        else:
+            LP_list.append(LP[0])
+    
+    return LP_list
