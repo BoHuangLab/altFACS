@@ -72,8 +72,8 @@ def scatterGate(data: pd.DataFrame, poly: plt.Polygon, verbose=False)->pd.DataFr
     p = path.Path(poly.get_xy())
 
     #Detect gated events
-    data.loc[:, "Scatter Gate"] = p.contains_points(coords)
-    scatter = data[data['Scatter Gate']]
+    data.loc[:, "Scatter+"] = p.contains_points(coords)
+    scatter = data[data['Scatter+']]
     
     ##Count scatter_gated_events
     scatter_gated_events = len(scatter)
