@@ -46,11 +46,14 @@ def singletPlot(data: pd.DataFrame, singlet_threshold, **kwargs):
     y = data['FSC-H']
     
     ratio = y / x
+    
+    doublets = data[ratio<=singlet_threshold]
+    singlets = data[ratio>singlet_threshold]
 
     if plot:
-        plt.scatter(x[ratio<=singlet_threshold], y[ratio<=singlet_threshold], alpha=doublet_alpha, s=size, c=doublet_color);
-        densityScatterPlot(x[ratio>singlet_threshold], y[ratio>singlet_threshold]);
-
+        doublets.plot(x='FSC-A', y='FSC-H', kind='scatter', alpha=doublet_alpha, s=size, c=doublet_color);
+        densityScatterPlot(singlets, 'FSC-A', 'FSC-H');
+        
         x=list(x.sort_values().reset_index(drop=True))
     
         xp_min = x[0]-1000
@@ -67,9 +70,11 @@ def singletPlot(data: pd.DataFrame, singlet_threshold, **kwargs):
         
     else:
         plt.ioff()
-        plt.scatter(x[ratio<=singlet_threshold], y[ratio<=singlet_threshold], alpha=doublet_alpha, s=size, c=doublet_color);
-        densityScatterPlot(x[ratio>singlet_threshold], y[ratio>singlet_threshold]);
-
+        doublets.plot(x='FSC-A', y='FSC-H', kind='scatter', alpha=doublet_alpha, s=size, c=doublet_color);
+        densityScatterPlot(singlets, 'FSC-A', 'FSC-H');
+        
+        x=list(x.sort_values().reset_index(drop=True))
+        
         xp_min = x[0]-1000
         xp_max = x[-1]+1000
         yp_min = singlet_threshold*xp_min
@@ -100,7 +105,6 @@ def singletGate(data: pd.DataFrame, singlet_threshold: float, **kwargs):
     assert 'FSC-H' in data.columns
     
     #Get **kwargs
-    plot              = kwargs.get('plot', True)
     verbose           = kwargs.get('verbose', True)
     
     x = data['FSC-A']
