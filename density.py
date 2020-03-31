@@ -7,17 +7,20 @@ from scipy.stats import gaussian_kde as kde
 from matplotlib.colors import Normalize
 from matplotlib import cm
 
-def densityScatterPlot(x, y, **kwargs):
+def densityScatterPlot(data: pd.DataFrame, x_channel: str, y_channel: str, **kwargs):
     '''function to generate publication quality 2D-density plots from FACS data'''
     
     #Get **kwargs
     plot      = kwargs.get('plot', True)
     title     = kwargs.get('title', 'densityScatter_figure.pdf')
-    xlabel    = kwargs.get('xlabel', 'Forward Scatter Area')
-    ylabel    = kwargs.get('ylabel', 'Side Scatter Area')
+    xlabel    = kwargs.get('xlabel', x_channel)
+    ylabel    = kwargs.get('ylabel', y_channel)
     cmap      = kwargs.get('cmap', 'jet')
     size      = kwargs.get('size', 1)
     save      = kwargs.get('save', False)
+    
+    x = data[x_channel]
+    y = data[y_channel]
     
     #Calculate density
     densObj = kde( [x, y] )
