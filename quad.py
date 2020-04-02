@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from densityScatter import densityScatterPlot
+from alternativeFACS.alternativeFACS.helpers.density import densityScatterPlot
 
 def quadCounts(df, channel1, channel1_threshold, channel2, channel2_threshold):
     '''function to count and return events in each quadrant'''
@@ -30,14 +30,11 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
     
     double_neg, c1_pos, c2_pos, double_pos = quadCounts(data, x_channel, x_channel_threshold, y_channel, y_channel_threshold)
     
-    x = data[x_channel]
-    y = data[y_channel]
-    
     if plot==False:
         plt.ioff()
     
     if density:
-        densityScatterPlot(x, y);
+        densityScatterPlot(data, x_channel, y_channel);
     else:
         plt.scatter(x,y);
         
