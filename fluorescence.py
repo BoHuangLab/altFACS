@@ -56,6 +56,7 @@ def autothreshold(data, channels,  **kwargs)->dict:
         else:
             # percentile method
             thresholds_dict[channel] = autothresholdChannel(data, channel, percentile=percentile)
+
             
     return thresholds_dict
     
