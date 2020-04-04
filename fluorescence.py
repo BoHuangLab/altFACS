@@ -17,21 +17,46 @@ def transformFluorescenceChannels(data: pd.DataFrame, channels: list, transform,
             output.loc[:,channel] = transform(data.loc[:,channel])
         return output
 
-def autothresholdChannel(data, channel, percentile=0.999)->float:
+def autothresholdChannel(data, channel, **kwargs)->float:
     '''
-    Find the 99.9th percentile of a channel.
+    Determine a threshold of a channel by mean + n_stdevs * std or by a set percentile.
     '''
-    return data[channel].quantile(percentile)
+    
+    #Get **kwargs
+    percentile = kwargs.get('percentile', 0.999)
+    n_stdevs   = kwargs.get('n_stdevs', None)
+    
+    if n_stdevs is not None:
+        # mean + n * standard deviation method
+        threshold = data[channel].mean() + n_stdevs*data[channel].std()
+    
+    else:
+        # percentile method
+        threshold = data[channel].quantile(percentile)
+    
+    return threshold
 
-def autothreshold(data, channels, percentile=0.999)->dict:
+def autothreshold(data, channels,  **kwargs)->dict:
     '''
     threshold each channel in the list
     '''
+    
+    #Get **kwargs
+    percentile = kwargs.get('percentile', 0.999)
+    n_stdevs   = kwargs.get('n_stdevs', None)
+    
     thresholds_dict = dict()
     
     for channel in channels:
-        thresholds_dict[channel] = autothresholdChannel(data, channel, percentile)
-    
+        
+        if n_stdevs is not None:
+            # mean + n * standard deviation method
+            thresholds_dict[channel] = autothresholdChannel(data, channel, n_stdevs=n_stdevs)
+            
+        else:
+            # percentile method
+            thresholds_dict[channel] = autothresholdChannel(data, channel, percentile=percentile)
+            
     return thresholds_dict
     
 def channelGate(data, channels, thresholds_dict):
