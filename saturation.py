@@ -18,17 +18,18 @@ def maskSaturation(df: pd.DataFrame, limit_dict: dict, verbose=False):
     #You have to use pd.DataFrame.copy() otherwise you will generate a view which will get overwritten
     mask = df.copy()
 
-    for channel in limit_dict.keys():
+    for channel in df.columns:
+        if channel in limit_dict.keys():
         
-        if verbose:
-            print('Removing',channel, 'saturation')
+            if verbose:
+                print('Removing',channel, 'saturation')
 
-        #Retrive channel specific limits from dictionary
-        lower = limit_dict[channel]['lower_limit']
-        upper = limit_dict[channel]['upper_limit']
+            #Retrive channel specific limits from dictionary
+            lower = limit_dict[channel]['lower_limit']
+            upper = limit_dict[channel]['upper_limit']
 
-        #Mask events not between the upper and lower limits
-        mask[channel] = maskChannelSaturation(mask, channel, lower, upper)
+            #Mask events not between the upper and lower limits
+            mask[channel] = maskChannelSaturation(mask, channel, lower, upper)
     
     if verbose:
         print('Unsaturated events =', len(mask.dropna()))
