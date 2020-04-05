@@ -76,7 +76,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     scatterGate(unsaturated, poly, verbose=True)
     
     ## Get scatter gated events
-    scatter = unsaturated[unsaturated['Scatter+']]
+    scatter = unsaturated[unsaturated['Scatter+']].copy()
     
     ##Count scatter_gated_events
     scatter_gated_events = len(scatter)
@@ -103,7 +103,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     singletGate(unsaturated, singlet_threshold)
     
     # Get singlets
-    singlets = unsaturated[unsaturated["Singlet+"]]
+    singlets = unsaturated[unsaturated["Singlet+"]].copy()
     
     # Count singlet events
     singlet_events = len(singlets)
