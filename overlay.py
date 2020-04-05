@@ -2,7 +2,6 @@ import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 
-##Make a generic plot function.
 def overlayPlot(data1: pd.DataFrame, data2: pd.DataFrame, x_channel: str, y_channel: str, **kwargs):
     '''function to generate a plot comparing mean signal across a number of bins'''
     
@@ -54,3 +53,15 @@ def overlayPlot(data1: pd.DataFrame, data2: pd.DataFrame, x_channel: str, y_chan
         plt.close()
     else:
         plt.show()
+
+        
+def shiftPlot(data, control_file_index, experiment_file_index, channel= '646nm'):
+
+    control    = data[data.File.eq(control_file_index)]
+    experiment = data[data.File.eq(experiment_file_index)]
+    
+    ##How do I overlay these?
+    control[channel].plot.kde(color='lightgrey');
+    experiment[channel].plot.kde(color=channel_colors[channel]);
+    plt.xlabel(channel);
+    plt.xlim(-1000, 8000);
