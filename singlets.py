@@ -112,7 +112,7 @@ def singletGate(data: pd.DataFrame, singlet_threshold: float, **kwargs):
     
     data.loc[:, 'Singlet+'] = (y/x)>singlet_threshold
     
-    singlets = data[data['Singlet+']]
+    singlets = data[data['Singlet+']].copy()
     
     ##Count scatter_gated_events
     singlet_gated_events = len(singlets)
