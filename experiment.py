@@ -21,6 +21,6 @@ def processExperiment(experiment: pd.DataFrame, limit_dict: dict, polygon: plt.P
     singlets = singletGate(unsaturated, singlet_threshold)
     
     #[4] Limit to singlets
-    singlets = singlets[singlets['Scatter+'] & singlets['Singlet+']]
+    singlets = singlets[singlets['Scatter+'] & singlets['Singlet+']].copy()
     
     return singlets
