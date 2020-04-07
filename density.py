@@ -12,12 +12,13 @@ def densityScatterPlot(data: pd.DataFrame, x_channel: str, y_channel: str, **kwa
     
     #Get **kwargs
     plot      = kwargs.get('plot', True)
-    title     = kwargs.get('title', 'densityScatter_figure.pdf')
+    title     = kwargs.get('title', 'densityScatter_figure')
     xlabel    = kwargs.get('xlabel', x_channel)
     ylabel    = kwargs.get('ylabel', y_channel)
     cmap      = kwargs.get('cmap', 'jet')
     size      = kwargs.get('size', 1)
     save      = kwargs.get('save', False)
+    savepath  = kwargs.get('savepath', './')
     
     x = data[x_channel]
     y = data[y_channel]
@@ -46,7 +47,7 @@ def densityScatterPlot(data: pd.DataFrame, x_channel: str, y_channel: str, **kwa
         
     if save:
         plt.tight_layout()
-        plt.savefig(title)
+        plt.savefig(savepath+title)
         
     if plot==False:
         plt.close()

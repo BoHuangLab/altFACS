@@ -41,6 +41,7 @@ def singletPlot(data: pd.DataFrame, singlet_threshold, **kwargs):
     doublet_color = kwargs.get('doublet_color', 'blue')
     doublet_alpha = kwargs.get('doublet_alpha', 0.1)
     save          = kwargs.get('save', False)
+    savepath      = kwargs.get('savepath', './')
     
     x = data['FSC-A']
     y = data['FSC-H']
@@ -89,7 +90,7 @@ def singletPlot(data: pd.DataFrame, singlet_threshold, **kwargs):
 
     if save:
         plt.tight_layout()
-        plt.savefig(title)
+        plt.savefig(savepath+title)
         
     if plot==False:
         plt.close()

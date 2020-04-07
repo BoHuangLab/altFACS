@@ -12,13 +12,10 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     '''determine scatter and singlet gates based on control data'''
     
     #Get **kwargs
-    plots      = kwargs.get('plots', False)
+    plot       = kwargs.get('plot', False)
     verbose    = kwargs.get('verbose', True)
-    contour    = kwargs.get('contour', 2)
-    nbins      = kwargs.get('nbins', 300)
-    edgecolour = kwargs.get('edgecolour', 'magenta')
     save       = kwargs.get('save', False)
-    savepath   = kwargs.get('save', './')
+    savepath   = kwargs.get('savepath', './')
     
     singlet_quantile  = kwargs.get('singlet_quantile', 0.05)
     
@@ -31,14 +28,13 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
         print('There are no events to analyse. Check the input DataFrame.')
         return
     
-    n = 1
-    
-    if plots:
-        plt.figure(n);      
-        densityScatterPlot(control, 'FSC-A', 'SSC-A');
+    if plot:
+        #Plot raw events
+        plt.figure(1)
+        kwargs['title'] = 'step1_raw_events'
+        densityScatterPlot(control, 'FSC-A', 'SSC-A', **kwargs);
         plt.title('Raw Events');
-        n += 1
-        
+
     mask = maskSaturation(control, limit_dict, verbose=True)
     unsaturated = mask.dropna()
     
@@ -54,23 +50,18 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
         percent_unsaturated = unsaturated_events/ total_events * 100
         print(round(percent_unsaturated, 2),'% of total events remaining')
 
-    if plots:
-        plt.figure(n);
-        
-    if plots:
-        densityScatterPlot(unsaturated, 'FSC-A', 'SSC-A', **kwargs);
-        plt.title('Unsaturated Events');
-        n += 1
-        
     ## Get contours
-    if plots:
-        plt.figure(n);
-           
-    poly = getContours(unsaturated, 'FSC-A', 'SSC-A', contour, plot=plots);
-    
-    if plots:
-        n += 1
+    plt.figure()
+    poly = getContours(unsaturated, 'FSC-A', 'SSC-A', **kwargs);
+    plt.close()
 
+    if plot:
+        ## contourPlot
+        plt.figure(2)
+        kwargs['title'] = 'step2_unsaturated_events'
+        contourPlot(unsaturated, 'FSC-A', 'SSC-A', poly, **kwargs)
+        plt.title('Unsaturated Events');
+    
     ## Add scatter gate 
     scatterGate(unsaturated, poly, verbose=True)
     
@@ -92,11 +83,12 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     ## Get singlet threshold
     singlet_threshold = singletThreshold(scatter, singlet_quantile)
 
-    if plots:
-        plt.figure(n);
-        singletPlot(scatter, singlet_threshold);
+    if plot:
+        #Plot singlets
+        plt.figure(3)
+        kwargs['title'] = 'step3_singlet_events'
+        singletPlot(scatter, singlet_threshold, **kwargs);
         plt.title('Singlet Plot');
-        n += 1
     
     ## Gate singlets
     singletGate(unsaturated, singlet_threshold)

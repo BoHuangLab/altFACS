@@ -26,6 +26,8 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
     title      = kwargs.get('title', 'quadPlot_figure.pdf')
     percentage = kwargs.get('percentage', True)
     density    = kwargs.get('density', True)
+    x_limits   = kwargs.get('x_limits', (-1000,10000))
+    y_limits    = kwargs.get('y_limits', (-1000,10000))
     save       = kwargs.get('save', False)
     
     double_neg, c1_pos, c2_pos, double_pos = quadCounts(data, x_channel, x_channel_threshold, y_channel, y_channel_threshold)
@@ -38,10 +40,10 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
     else:
         plt.scatter(x,y);
         
-    plt.axvline(x_channel_threshold, -1000, 10000);
-    plt.axhline(y_channel_threshold, -1000, 10000);
-    plt.xlim(-1000, 10000)
-    plt.ylim(-1000, 10000)
+    plt.axvline(x_channel_threshold, y_limits[0], y_limits[1]);
+    plt.axhline(y_channel_threshold, x_limits[0], x_limits[1]);
+    plt.xlim(x_limits)
+    plt.ylim(y_limits)
     
     if percentage:
         total=len(data)

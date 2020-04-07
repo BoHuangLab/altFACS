@@ -8,38 +8,26 @@ from matplotlib.colors import Normalize
 from matplotlib import cm
 from matplotlib.patches import Polygon
 from matplotlib import path
+
+from alternativeFACS.alternativeFACS.helpers.density  import *
         
-def getContours(data: pd.DataFrame, x: str, y: str, contour: int, **kwargs)->plt.Polygon:
+def getContours(data: pd.DataFrame, x='FSC-A', y='SSC-A', **kwargs)->plt.Polygon:
     '''function to generate and return a contour polygon for gating'''
     
     x = data[x]
     y = data[y]
     
     #Get **kwargs
-    nbins     = kwargs.get('nbins', 300)
-    plot      = kwargs.get('plot', False)
-    title     = kwargs.get('title', 'contourPlot_figure')
-    edgecolor = kwargs.get('edgecolor', 'magenta')
-    save      = kwargs.get('save', False)
+    contour   = kwargs.get('contour', 2)
+    nbins     = kwargs.get('densityScatterPlot_bins_number', 300)
     
     # Evaluate a gaussian kde on a regular grid of nbins x nbins over data extents
     k = kde([x,y])
     xi, yi = np.mgrid[x.min():x.max():nbins*1j, y.min():y.max():nbins*1j]
     zi = k(np.vstack([xi.flatten(), yi.flatten()]))
     
-    if plot==False:
-        plt.ioff()
-    
     CS = plt.contour(xi, yi, zi.reshape(xi.shape));
     
-    if save:
-        fig.savefig(title)
-    
-    if plot==False:
-        plt.close()
-    else:
-        plt.show()
-
     #Extract desired contour
     coords = CS.allsegs[contour][0]
     
@@ -57,11 +45,36 @@ def getContours(data: pd.DataFrame, x: str, y: str, contour: int, **kwargs)->plt
     yp = coord_array.T[1]
 
     #Define polygon
-    poly = Polygon(np.column_stack([xp, yp]), edgecolor="magenta", fill=False)
+    poly = Polygon(np.column_stack([xp, yp]), fill=False)
     
     return poly
 
 
+def contourPlot(data: pd.DataFrame, x: str, y: str, poly: plt.Polygon, **kwargs):
+    
+    #Get **kwargs
+    title     = kwargs.get('title', 'contourPlot_figure')
+    ringcolor = kwargs.get('contour_ring_color', 'magenta')
+    save      = kwargs.get('save', False)
+    savepath  = kwargs.get('savepath', './')
+    polyfill      = kwargs.get('polygon_fill', False)
+    
+    #Set plot kwarg to True
+    kwargs['plot'] = True
+    #Set save kwarg to False
+    kwargs['save'] = False
+
+    densityScatterPlot(data, 'FSC-A', 'SSC-A', **kwargs);
+   
+    #Define polygon
+    poly = Polygon(poly.xy, edgecolor = ringcolor, fill=polyfill)
+    
+    plt.gca().add_patch(poly);
+    
+    if save:
+        plt.savefig(savepath+title)
+        
+    
 def scatterGate(data: pd.DataFrame, poly: plt.Polygon, verbose=False)->pd.DataFrame:
     '''Add boolean Scatter Gates indicating events within the input polygon.'''
     
