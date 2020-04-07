@@ -9,8 +9,11 @@ from matplotlib import cm
 from matplotlib.patches import Polygon
 from matplotlib import path
         
-def getContours(x, y, contour: int, **kwargs)->plt.Polygon:
+def getContours(data: pd.DataFrame, x: str, y: str, contour: int, **kwargs)->plt.Polygon:
     '''function to generate and return a contour polygon for gating'''
+    
+    x = data[x]
+    y = data[y]
     
     #Get **kwargs
     nbins     = kwargs.get('nbins', 300)

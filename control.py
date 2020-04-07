@@ -17,6 +17,8 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     contour    = kwargs.get('contour', 2)
     nbins      = kwargs.get('nbins', 300)
     edgecolour = kwargs.get('edgecolour', 'magenta')
+    save       = kwargs.get('save', False)
+    savepath   = kwargs.get('save', './')
     
     singlet_quantile  = kwargs.get('singlet_quantile', 0.05)
     
@@ -56,18 +58,15 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
         plt.figure(n);
         
     if plots:
-        densityScatterPlot(unsaturated, 'FSC-A', 'SSC-A');
+        densityScatterPlot(unsaturated, 'FSC-A', 'SSC-A', **kwargs);
         plt.title('Unsaturated Events');
         n += 1
         
     ## Get contours
     if plots:
         plt.figure(n);
-        
-    x = unsaturated['FSC-A']
-    y = unsaturated['SSC-A']
-    
-    poly = getContours(x, y, contour, plot=plots);
+           
+    poly = getContours(unsaturated, 'FSC-A', 'SSC-A', contour, plot=plots);
     
     if plots:
         n += 1
