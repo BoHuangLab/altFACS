@@ -25,7 +25,7 @@ def singletThreshold(data: pd.DataFrame, singlet_quantile, verbose=True)->float:
     return singlet_threshold
 
 
-def singletPlot(data: pd.DataFrame, singlet_threshold, **kwargs):
+def singletPlot(data: pd.DataFrame, singlet_threshold: float, **kwargs):
     '''Plot events above and below the singlet Threshold'''
     
     assert 'FSC-A' in data.columns

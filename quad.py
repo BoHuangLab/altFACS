@@ -27,8 +27,9 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
     percentage = kwargs.get('percentage', True)
     density    = kwargs.get('density', True)
     x_limits   = kwargs.get('x_limits', (-1000,10000))
-    y_limits    = kwargs.get('y_limits', (-1000,10000))
+    y_limits   = kwargs.get('y_limits', (-1000,10000))
     save       = kwargs.get('save', False)
+    savepath   = kwargs.get('savepath', './')
     
     double_neg, c1_pos, c2_pos, double_pos = quadCounts(data, x_channel, x_channel_threshold, y_channel, y_channel_threshold)
     
@@ -38,7 +39,7 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
     if density:
         densityScatterPlot(data, x_channel, y_channel);
     else:
-        plt.scatter(x,y);
+        data.plot.scatter(x=x_channel, y=y_channel);
         
     plt.axvline(x_channel_threshold, y_limits[0], y_limits[1]);
     plt.axhline(y_channel_threshold, x_limits[0], x_limits[1]);
@@ -64,9 +65,10 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
     plt.text(0.99,0.01, 'Q4: '+Q4, transform=ax.transAxes, horizontalalignment='right');
     
     if save:
-        plt.savefig(title)
+        plt.savefig(savepath+title)
     
     if plot==False:
         plt.close()
-    else:
-        plt.show()
+    
+    #Restore interactive plotting
+    plt.ion()

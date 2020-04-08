@@ -75,11 +75,14 @@ def contourPlot(data: pd.DataFrame, x: str, y: str, poly: plt.Polygon, **kwargs)
         plt.savefig(savepath+title)
         
     
-def scatterGate(data: pd.DataFrame, poly: plt.Polygon, verbose=False)->pd.DataFrame:
+def scatterGate(data: pd.DataFrame, poly: plt.Polygon, **kwargs)->pd.DataFrame:
     '''Add boolean Scatter Gates indicating events within the input polygon.'''
     
     assert 'FSC-A' in data.columns
     assert 'SSC-A' in data.columns
+    
+    #Get **kwargs
+    verbose     = kwargs.get('verbose', True)
     
     ##get data coordinates
     coords = np.array(data[['FSC-A', 'SSC-A']])

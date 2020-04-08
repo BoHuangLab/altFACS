@@ -35,7 +35,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
         densityScatterPlot(control, 'FSC-A', 'SSC-A', **kwargs);
         plt.title('Raw Events');
 
-    mask = maskSaturation(control, limit_dict, verbose=True)
+    mask = maskSaturation(control, limit_dict, **kwargs)
     unsaturated = mask.dropna()
     
     ##Count unsaturated
