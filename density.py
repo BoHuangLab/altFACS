@@ -12,6 +12,7 @@ def densityScatterPlot(data: pd.DataFrame, x_channel: str, y_channel: str, **kwa
     
     #Get **kwargs
     plot      = kwargs.get('plot', True)
+    ax        = kwargs.get('ax', plt.gca())
     title     = kwargs.get('title', 'densityScatter_figure')
     xlabel    = kwargs.get('xlabel', x_channel)
     ylabel    = kwargs.get('ylabel', y_channel)
@@ -35,15 +36,15 @@ def densityScatterPlot(data: pd.DataFrame, x_channel: str, y_channel: str, **kwa
     colours = [cm.ScalarMappable( norm=norm, cmap=cmap).to_rgba( val ) for val in vals]
     
     if plot:
-        plt.scatter( x, y, color=colours, s=size)
-        plt.xlabel(xlabel);
-        plt.ylabel(ylabel);
-        #plt.show()
+        ax.scatter( x, y, color=colours, s=size)
+        ax.set_xlabel(xlabel);
+        ax.set_ylabel(ylabel);
+
     else:
         plt.ioff()
-        plt.scatter( x, y, color=colours, s=size)
-        plt.xlabel(xlabel);
-        plt.ylabel(ylabel);
+        ax.scatter( x, y, color=colours, s=size)
+        ax.set_xlabel(xlabel);
+        ax.set_ylabel(ylabel);
         
     if save:
         plt.tight_layout()

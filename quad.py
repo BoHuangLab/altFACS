@@ -23,6 +23,7 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
     
     #Get **kwargs
     plot       = kwargs.get('plot', True)
+    ax         = kwargs.get('ax', plt.gca())
     title      = kwargs.get('title', 'quadPlot_figure.pdf')
     percentage = kwargs.get('percentage', True)
     density    = kwargs.get('density', True)
@@ -37,14 +38,12 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
         plt.ioff()
     
     if density:
-        densityScatterPlot(data, x_channel, y_channel);
+        densityScatterPlot(data, x_channel, y_channel, **kwargs);
     else:
-        data.plot.scatter(x=x_channel, y=y_channel);
+        data.plot.scatter(x=x_channel, y=y_channel, ax=ax, title=title);
         
-    plt.axvline(x_channel_threshold, y_limits[0], y_limits[1]);
-    plt.axhline(y_channel_threshold, x_limits[0], x_limits[1]);
-    plt.xlim(x_limits)
-    plt.ylim(y_limits)
+    ax.axvline(x_channel_threshold);
+    ax.axhline(y_channel_threshold);
     
     if percentage:
         total=len(data)
@@ -58,7 +57,6 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
     Q3 = str(np.round((double_neg/total)*100, dec))
     Q4 = str(np.round((c1_pos/total)*100, dec))
 
-    ax=plt.gca()
     plt.text(0.01,0.99, 'Q1: '+Q1, transform=ax.transAxes, verticalalignment='top');
     plt.text(0.99,0.99, 'Q2: '+Q2, transform=ax.transAxes, horizontalalignment='right', verticalalignment='top');
     plt.text(0.01,0.01, 'Q3: '+Q3, transform=ax.transAxes);
