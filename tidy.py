@@ -3,6 +3,30 @@ from os.path import isfile, join
 import fcsparser
 import pandas as pd
 
+def getChannelMeta(path: str)-> pd.DataFrame:
+    '''strip Channel metadata from an .fcs file
+    
+    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2892967/pdf/nihms203250.pdf
+    '''
+    
+    meta, data = fcsparser.parse(path, reformat_meta=True)
+    
+    channel_metadata = meta['_channels_']
+    
+    channel_metadata = channel_metadata.reset_index(drop=True)
+    
+    channel_meta_dict = {'$PnN': 'Channel', 
+                         '$PnR': 'Range', 
+                         '$PnB': 'Bit Depth', 
+                         '$PnE': 'Amplification Type', 
+                         '$PnV': 'Voltage', 
+                         '$PnG': 'Gain'}
+    
+    channel_metadata = channel_metadata.rename(columns=channel_meta_dict)
+    
+    return channel_metadata
+
+
 def getFileInfo(filelist, **kwargs)->pd.DataFrame():
     '''strip some information from the input file name'''
     
