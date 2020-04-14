@@ -13,10 +13,11 @@ def overlayPlot(data1: pd.DataFrame, data2: pd.DataFrame, x_channel: str, y_chan
     exp_color = kwargs.get('exp_color', 'green')
     x_label   = kwargs.get('x_label', x_channel)
     y_label   = kwargs.get('y_label', y_channel)
-    labels    = kwargs.get('xlim', ['control', 'experiment'])
+    labels    = kwargs.get('labels', ['control', 'experiment'])
     xlim      = kwargs.get('xlim', [-1000, 10000])
     ylim      = kwargs.get('ylim', [-1000, 10000])
     save      = kwargs.get('save', False)
+    savepath  = kwargs.get('savepath', './')
     
     fig, ax = plt.subplots()
     
@@ -47,21 +48,23 @@ def overlayPlot(data1: pd.DataFrame, data2: pd.DataFrame, x_channel: str, y_chan
     plt.ylabel(y_label);
     
     if save:
-        plt.savefig(title)
+        plt.savefig(savepath+title)
     
     if plot==False:
         plt.close()
-    else:
-        plt.show()
 
         
-def shiftPlot(data, control_file_index, experiment_file_index, channel= '646nm'):
-
+def shiftPlot(data, control_file_index, experiment_file_index, channel='646nm', **kwargs):
+    
+    x_limits       = kwargs.get('x_limits', (-1000, 8000))
+    control_color  = kwargs.get('control_color', 'lightgrey')
+    channel_colors = kwargs.get('channel_colors', {})
+    
     control    = data[data.File.eq(control_file_index)]
     experiment = data[data.File.eq(experiment_file_index)]
     
     ##How do I overlay these?
-    control[channel].plot.kde(color='lightgrey');
-    experiment[channel].plot.kde(color=channel_colors[channel]);
+    control[channel].plot.kde(color=control_color);
+    experiment[channel].plot.kde(color=channel_colors.get(channel, 'k')); #default to black
     plt.xlabel(channel);
-    plt.xlim(-1000, 8000);
+    plt.xlim(*x_limits);
