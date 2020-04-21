@@ -2,8 +2,29 @@ import sys
 import pandas as pd
 
 #Mask channel
-def maskChannelSaturation(df, channel, lower, upper):
-    '''replace channel values below lower or above upper with NaN'''
+def maskChannelSaturation(df: pd.DataFrame, channel:str, lower:float, upper: float)-> pd.DataFrame:
+    """
+    replace channel values below lower or above upper with NaN
+    
+    Parameters:
+    df: pd.DataFrame
+    data containing the column to be masked 
+    
+    channel: str
+    the name of the column to be masked 
+    
+    lower: float
+    the threshold below which, values will be replaced with NaN.
+    
+    upper: float
+    the threshold above which, values will be replaced with NaN.
+    
+    Returns:
+    mask: pd.DataFrame
+    a dataframe like df except with values in df[channel] outside lower and upper replace with NaN.
+    values are not removed so mask.shape == df.shape.
+    
+    """
 
     #Is the value above the lower threshold?  
     return df[channel].mask(~df[channel].between(lower, upper, inclusive = False))

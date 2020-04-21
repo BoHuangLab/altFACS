@@ -4,10 +4,10 @@ import fcsparser
 import pandas as pd
 
 def getChannelMeta(path: str)-> pd.DataFrame:
-    '''strip Channel metadata from an .fcs file
+    """strip Channel metadata from an .fcs file
     
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2892967/pdf/nihms203250.pdf
-    '''
+    """
     
     meta, data = fcsparser.parse(path, reformat_meta=True)
     
@@ -28,7 +28,7 @@ def getChannelMeta(path: str)-> pd.DataFrame:
 
 
 def getFileInfo(filelist, **kwargs)->pd.DataFrame():
-    '''strip some information from the input file name'''
+    """strip some information from the input file name"""
     
     #Get **kwargs
     search_list = kwargs.get('search_list', None)
@@ -60,7 +60,7 @@ def getFileInfo(filelist, **kwargs)->pd.DataFrame():
     return file_info
         
 def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
-    '''accept a list of .fcs files and generate a tidy pandas.Dataframe'''
+    """accept a list of .fcs files and generate a tidy pandas.Dataframe"""
     
     ##Rationale users may have a single file that they want a plot from as quickly as possible.
     
@@ -150,7 +150,7 @@ def makeDataFrame(input_directory, filelist, **kwargs)->pd.DataFrame():
 
 ## Combine classifiers
 def combineClassifiers(data, input_columns, output_column, drop=False):
-    '''Combine mutually exclusive input_columns into a single catagorical output column.'''
+    """Combine mutually exclusive input_columns into a single catagorical output column."""
     
     data[output_column] = data[input_columns].idxmax(axis=1)
     
@@ -161,7 +161,23 @@ def combineClassifiers(data, input_columns, output_column, drop=False):
 
 #Fix Architectures
 def fixArchitecture(data, architcture_column):
-    '''Handle our 'landing pad' nomenclature, e.g. LP02.'''
+    """
+    Handle our 'landing pad' nomenclature, e.g. LP02.
+    
+    Return Architectures in the architcture_column of data as a list of strings.
+    Blanks will be replaced by 'LP00'.
+    
+    Parameters:
+    data:                pandas DataFrame
+    should contain a column 'architcture_column' that contains 'landing pad' information.
+    
+    architecture_column: 
+    index of column containing Landing Pad Architecture information. Expects a string.
+    
+    Returns:     
+    LP_list:  list
+    a list of strings.
+    """
     
     LP_list=list()
     for LP in data[architcture_column]:
