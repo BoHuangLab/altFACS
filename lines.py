@@ -1,3 +1,24 @@
+"""
+Lines
+
+The Huang Lab uses flow cytometry to investigate interactions between split fluorescent protein fragments. 
+This module contains functions to scale and fit FACS data.
+
+Functions:
+plotFit          -
+rescale          - 
+rescalePlot      -
+piecewise_linear -
+fitGated         - 
+
+Requirements:
+numpy
+pandas
+matplotlib
+scipy
+
+"""
+
 import sys
 import numpy as np
 import pandas as pd
@@ -11,13 +32,18 @@ def plotFit(data, x_channel, y_channel, **kwargs):
     
     linecolor = kwargs.get('linecolor', 'red')
     
+    scatter_settings = {}
+    scatter_settings['s']      = kwargs.get('s',2)
+    scatter_settings['c']      = kwargs.get('c', 'g')
+    scatter_settings['alpha']  = kwargs.get('alpha', 0.2)
+    
     x = data[x_channel]
     y = data[y_channel]
     
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
     print("slope:%f intercept:%f p_value: %f std_err:%f " % (slope, intercept, p_value, std_err))
     
-    plt.scatter(x, y, **kwargs)
+    plt.scatter(x, y, **scatter_settings)
     
     xx = pd.Series([x.min(), x.max()])
    
@@ -34,7 +60,7 @@ def rescale(y, slope:float, intercept: float):
     return yy
 
 def rescalePlot(data, x_channel:str, y_channel:str, slope:float, intercept:float, **kwargs):
-    ''' '''
+    """  """
     
     
     x = data[x_channel]
@@ -106,4 +132,4 @@ def fitGated(data, x_channel, y_channel):
     yy = xx.apply(lambda xx: gradient*xx+offset)
 
     plt.plot(xx, yy, c='red');
-    plt.title(file_info.loc[file_num, 'Description']);
+    #plt.title(file_info.loc[file_num, 'Description']);
