@@ -28,7 +28,49 @@ from scipy import stats
 from scipy import optimize
 
 def plotFit(data, x_channel, y_channel, **kwargs):
-    '''plot FACS with linear regression line'''
+    '''
+    plot FACS with linear regression line
+    
+    Parameters:
+    data: pd.DataFrame
+    The data to be plotted and fit. 
+    
+    x_channel: str
+    The name of the column containing the x-coordinates. 
+    
+    y_channel: str
+    The name of the column containing the y-coordinates. 
+    
+    kwargs: dict
+    additional arguments to be passed to the scatter plot or line plot functions.
+    
+    s: int
+    The size of the scatter plot markers
+    
+    c: str
+    The colour of the scatter plot markers
+    
+    alpha: str
+    The opacity of the scatter plot markers
+    
+    linecolor: str
+    The color of the fit line.
+    
+    Returns:
+    slope: float
+    The gradient of the linear regression
+    
+    intercept: float
+    The value at which a linear regression would cross the y axis.
+    
+    r_value: float
+    
+    p_value: float
+    
+    std_err: float  
+        
+    
+    '''
     
     linecolor = kwargs.get('linecolor', 'red')
     
@@ -41,8 +83,7 @@ def plotFit(data, x_channel, y_channel, **kwargs):
     y = data[y_channel]
     
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
-    print("slope:%f intercept:%f p_value: %f std_err:%f " % (slope, intercept, p_value, std_err))
-    
+        
     plt.scatter(x, y, **scatter_settings)
     
     xx = pd.Series([x.min(), x.max()])
@@ -50,6 +91,8 @@ def plotFit(data, x_channel, y_channel, **kwargs):
     yy = xx.apply(lambda xx: slope*xx+intercept)
     
     plt.plot(xx, yy, c=linecolor);
+    
+    return slope, intercept, r_value, p_value, std_err
     
 
 def rescale(y, slope:float, intercept: float):
@@ -98,17 +141,69 @@ def rescalePlot(data, x_channel:str, y_channel:str, slope:float, intercept:float
 def piecewise_linear(x, x0, y0, k1, k2):
     return np.piecewise(x, [x < x0], [lambda x:k1*x + y0-k1*x0, lambda x:k2*x + y0-k2*x0])
 
-def fitGated(data, x_channel, y_channel):
-    '''this function allows y_gated data to be fitted accurately
+def zeroSlopeFirst(df: pd.DataFrame, file_num: int, x: str, y: str, **kwargs):
     
-    Along the lines of the strategy employed in our split-sfCherry3 paper.
-    https://static-content.springer.com/esm/art%3A10.1038%2Fs42003-019-0589-x/MediaObjects/42003_2019_589_MOESM1_ESM.pdf
-    '''
+    data = df[df.File.eq(file_num)]
+
+    x=data[x]
+    y=data[y]
+
+    s     = kwargs.get('s', 2)
+    c     = kwargs.get('c', 'green')
+    alpha = kwargs.get('s', 0.1)
+
+    p0       = kwargs.get('p0', [3.5, 2.5, 1])  #Initial guesses
+    k1_fixed = kwargs.get('k1_fixed', 0)        #Fixed gradient   
+
+    plt.scatter(x, y, s=s, alpha=alpha, c=c)
+    plt.xlim(1,5);
+    plt.ylim(1,5);
+    plt.yticks([1,2,3,4,5]);
+
+    #Set the axis to be equal
+    plt.gca().set_aspect('equal');
+
+    x = np.array(x)
+    y = np.array(y)
+
+    #Use lambda to fix the first gradient 'k1'
+    k1_fixed = 0
+
+    p , e = optimize.curve_fit(lambda x, x0, y0, k2: piecewise_linear(x, x0, y0, k1_fixed, k2), x, y, p0)
+
+    #get parameters
+    x0, y0, k2 = p
+
+    xd = np.linspace(x.min(), x.max(), 100)
+
+    plt.plot(xd, piecewise_linear(xd, x0, y0, k1_fixed, k2), c='r');
+    plt.title(file_info.loc[file_num, 'Description']);
+
+    return k1_fixed, k2, x0, e
+
+
+def fitGated(df: pd.DataFrame, file_num: int, x_channel: str, y_channel: str, **kwargs):
+    """
+    Plot and fit data accurately despite a sharp artifical cut off.
+    
+    FACS data are often threshold gated, which produces a sharp artificial cut off. 
+    This can generate asymmetry (which fitting algorithms expect in y, but not in x),
+    which biases the linear regression. One way to overcome this issue is to swap the axis before fitting, 
+    and then reverse our equation.
+    
+    """
+    
+    s     = kwargs.get('s', 2)
+    c     = kwargs.get('c', 'green')
+    alpha = kwargs.get('s', 0.1)
+    
+    
+    data = double[double.File.eq(file_num)]
     
     x=data[x_channel]
     y=data[y_channel]
 
-    plt.scatter(x, y, s=2, alpha=0.3, c='green')
+    plt.scatter(x, y, s=s, alpha=alpha, c=c)
     plt.xlim(1,5);
     plt.ylim(1,5);
     plt.yticks([1,2,3,4,5]);
@@ -120,7 +215,6 @@ def fitGated(data, x_channel, y_channel):
 
     #Fit y against x
     slope, intercept, r_value, p_value, std_err = stats.linregress(y, x)
-    #In this case both slope and intercept are fitted parameters.
     
     gradient = 1/slope
     offset   = -intercept/slope
@@ -132,4 +226,6 @@ def fitGated(data, x_channel, y_channel):
     yy = xx.apply(lambda xx: gradient*xx+offset)
 
     plt.plot(xx, yy, c='red');
-    #plt.title(file_info.loc[file_num, 'Description']);
+    plt.title(file_info.loc[file_num, 'Description']);
+    
+    return gradient, offset, p_value, std_err
