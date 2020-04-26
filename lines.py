@@ -177,7 +177,6 @@ def zeroSlopeFirst(df: pd.DataFrame, file_num: int, x: str, y: str, **kwargs):
     xd = np.linspace(x.min(), x.max(), 100)
 
     plt.plot(xd, piecewise_linear(xd, x0, y0, k1_fixed, k2), c='r');
-    plt.title(file_info.loc[file_num, 'Description']);
 
     return k1_fixed, k2, x0, e
 
@@ -197,8 +196,7 @@ def fitGated(df: pd.DataFrame, file_num: int, x_channel: str, y_channel: str, **
     c     = kwargs.get('c', 'green')
     alpha = kwargs.get('s', 0.1)
     
-    
-    data = double[double.File.eq(file_num)]
+    data = df[df.File.eq(file_num)]
     
     x=data[x_channel]
     y=data[y_channel]
@@ -218,14 +216,11 @@ def fitGated(df: pd.DataFrame, file_num: int, x_channel: str, y_channel: str, **
     
     gradient = 1/slope
     offset   = -intercept/slope
-    
-    print("slope:%f intercept:%f p_value: %f std_err:%f " % (gradient, offset, p_value, std_err))
 
     xx = pd.Series([x.min(), x.max()])
 
     yy = xx.apply(lambda xx: gradient*xx+offset)
 
     plt.plot(xx, yy, c='red');
-    plt.title(file_info.loc[file_num, 'Description']);
     
     return gradient, offset, p_value, std_err
