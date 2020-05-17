@@ -17,18 +17,16 @@ setup(
     url="https://github.com/davidbrown2324/altFACS",
     author="David Brown",
     author_email="david.brown3@ucsf.edu",
-    license="MIT",                                  
+    license="MIT",
     classifiers=[
         #"License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
-    ],
+        "Programming Language :: Python :: 3.7"],
     packages=["altFACS"],                    #100% required
     include_package_data=True,
-#    install_requires=["feedparser", "html2text"],   #what should these be?
-#    entry_points={
-#        "console_scripts": [
-#            "alternativeFACS=alternativeFACS.alternativeFACS:main",      #what should these be?
-#        ]
-#    },
+    install_requires=["fcsparser",
+        "numpy",
+        "pandas"
+        "matplotlib",
+        "pickleshare"]
 )
