@@ -9,7 +9,7 @@ from matplotlib import cm
 from matplotlib.patches import Polygon
 from matplotlib import path
 
-from alternativeFACS.alternativeFACS.helpers.density  import *
+from altFACS.density  import *
         
 def getContours(data: pd.DataFrame, x='FSC-A', y='SSC-A', **kwargs)->plt.Polygon:
     '''function to generate and return a contour polygon for gating'''
