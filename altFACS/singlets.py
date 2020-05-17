@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 #This is a problem
-from alternativeFACS.alternativeFACS.helpers.density  import *
+from altFACS.density  import *
 
 def singletThreshold(data: pd.DataFrame, singlet_quantile, verbose=True)->float:
     '''Return the singlet ratio for a given quantile.'''

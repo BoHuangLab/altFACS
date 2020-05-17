@@ -3,9 +3,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from alternativeFACS.alternativeFACS.helpers.saturation  import *
-from alternativeFACS.alternativeFACS.helpers.contours import *
-from alternativeFACS.alternativeFACS.helpers.singlets import *
+from altFACS.saturation  import *
+from altFACS.contours import *
+from altFACS.singlets import *
 
 def processExperiment(experiment: pd.DataFrame, limit_dict: dict, polygon: plt.Polygon, singlet_threshold: float):
     '''remove saturation, gate event scattering based on a supplied polygon and eliminate doublet events'''
