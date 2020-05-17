@@ -28,5 +28,6 @@ setup(
         "numpy",
         "pandas"
         "matplotlib",
-        "pickleshare"]
+        "pickleshare"
+        "scipy"]
 )
