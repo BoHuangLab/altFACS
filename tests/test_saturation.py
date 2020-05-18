@@ -1,3 +1,5 @@
+import unittest
+
 import numpy as np
 import pandas as pd
 from altFACS.saturation  import *
@@ -24,18 +26,18 @@ expected_mask_df = pd.DataFrame()
 expected_mask_df.loc[:,'Channel-A'] = channel_A_mask
 expected_mask_df.loc[:,'Channel-B'] = channel_B_mask
 
-def test_maskChannelSaturation():
-    mask = maskChannelSaturation(df=test_df, channel = 'Channel-A', lower = 3, upper = 7)
-    assert mask.equals(channel_A_mask)
+class TestSaturation(unittest.TestCase):
 
-def test_maskSaturation():
-    mask = maskSaturation(df=test_df, limit_dict=test_dict)
-    assert mask.equals(expected_mask_df)
-    
+    def test_maskChannelSaturation(self):
+        mask = maskChannelSaturation(df=test_df, channel = 'Channel-A', lower = 3, upper = 7)
+        self.assertTrue(mask.equals(channel_A_mask), "Channel values at or beyond the upper or lower limits should be masked.")
+
+    def test_maskSaturation(self):
+        mask = maskSaturation(df=test_df, limit_dict=test_dict)
+        self.assertTrue(mask.equals(expected_mask_df), "Values at or beyond the limits for that channel should be masked.")
+
 # Test edge cases
 # There should be an error message if the upper and lower bounds are swapped by mistake
 
 if __name__ == "__main__":
-    test_maskChannelSaturation()
-    test_maskSaturation()
-    print("Everything passed")
+    unittest.main(argv=['first-arg-is-ignored'], exit=False)
