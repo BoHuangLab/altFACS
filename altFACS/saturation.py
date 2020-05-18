@@ -1,8 +1,8 @@
 import sys
 import pandas as pd
 
-#Mask channel
-def maskChannelSaturation(df: pd.DataFrame, channel:str, lower:float, upper: float)-> pd.DataFrame:
+# Mask channel
+def maskChannelSaturation(df: pd.DataFrame, channel: str, lower: float, upper: float)-> pd.DataFrame:
     """
     replace channel values below lower or above upper with NaN
     
@@ -26,21 +26,21 @@ def maskChannelSaturation(df: pd.DataFrame, channel:str, lower:float, upper: flo
     
     """
 
-    #Is the value above the lower threshold?  
+    # Is the value above the lower threshold?  
     return df[channel].mask(~df[channel].between(lower, upper, inclusive = False))
 
 
-#Iterate through channels
+# Iterate through channels
 def maskSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
     '''replace values outside channel limits with NaN'''
     
-    #Get **kwargs
+    # Get **kwargs
     verbose     = kwargs.get('verbose', True)
     
     if verbose:
         print('Input events =', len(df))
 
-    #You have to use pd.DataFrame.copy() otherwise you will generate a view which will get overwritten
+    # Use pd.DataFrame.copy() otherwise you will generate a view which will get overwritten
     mask = df.copy()
 
     for channel in df.columns:
@@ -49,11 +49,11 @@ def maskSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
             if verbose:
                 print('Removing',channel, 'saturation')
 
-            #Retrive channel specific limits from dictionary
+            # Retrive channel specific limits from dictionary
             lower = limit_dict[channel]['lower_limit']
             upper = limit_dict[channel]['upper_limit']
 
-            #Mask events not between the upper and lower limits
+            # Mask events not between the upper and lower limits
             mask[channel] = maskChannelSaturation(mask, channel, lower, upper)
     
     if verbose:

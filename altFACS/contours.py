@@ -9,7 +9,7 @@ from matplotlib import cm
 from matplotlib.patches import Polygon
 from matplotlib import path
 
-from altFACS.density  import *
+from altFACS.density import *
         
 def getContours(data: pd.DataFrame, x='FSC-A', y='SSC-A', **kwargs)->plt.Polygon:
     '''function to generate and return a contour polygon for gating'''
@@ -18,8 +18,9 @@ def getContours(data: pd.DataFrame, x='FSC-A', y='SSC-A', **kwargs)->plt.Polygon
     y = data[y]
     
     #Get **kwargs
-    contour   = kwargs.get('contour', 2)
-    nbins     = kwargs.get('densityScatterPlot_bins_number', 300)
+    contour    = kwargs.get('contour', 2)
+    population = kwargs.get('population', 0) #which population for plots with more than one
+    nbins      = kwargs.get('densityScatterPlot_bins_number', 300)
     
     # Evaluate a gaussian kde on a regular grid of nbins x nbins over data extents
     k = kde([x,y])
