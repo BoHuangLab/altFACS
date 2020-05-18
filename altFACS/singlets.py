@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-#This is a problem
 from altFACS.density  import *
 
 def singletThreshold(data: pd.DataFrame, singlet_quantile, verbose=True)->float:
