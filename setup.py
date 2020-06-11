@@ -10,11 +10,11 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="altFACS",                          #100% required
-    version="1.0.1",                         #100% required
+    version="1.0.4",                         #100% required
     description="FACS tools for split fluorescent proteins",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/davidbrown2324/altFACS",
+    url="https://github.com/BoHuangLab/altFACS",
     author="David Brown",
     author_email="david.brown3@ucsf.edu",
     license="MIT",
