@@ -17,6 +17,7 @@ def densityScatterPlot(data: pd.DataFrame, x_channel: str, y_channel: str, **kwa
     xlabel    = kwargs.get('xlabel', x_channel)
     ylabel    = kwargs.get('ylabel', y_channel)
     cmap      = kwargs.get('cmap', 'jet')
+    alphas    = kwargs.get('alphas', None)
     size      = kwargs.get('size', 1)
     save      = kwargs.get('save', False)
     savepath  = kwargs.get('savepath', './')
@@ -32,8 +33,15 @@ def densityScatterPlot(data: pd.DataFrame, x_channel: str, y_channel: str, **kwa
     colours = np.zeros( (len( vals ),3) )
     norm = Normalize( vmin=vals.min(), vmax=vals.max() )
 
-    #Can put any colormap you like here.
-    colours = [cm.ScalarMappable( norm=norm, cmap=cmap).to_rgba( val ) for val in vals]
+    # Optionally set transparency of points based on a list of alpha values.
+    if alphas is None:
+        # Convert look up colormap to a list of RGB values for each point.
+        colours = [cm.ScalarMappable( norm=norm, cmap=cmap).to_rgba(val) for val in vals]
+
+    else:
+        # Convert look up colormap to a list of RGBA values for each point.
+        colours = [cm.ScalarMappable( norm=norm, cmap=cmap).to_rgba(val, alpha) for val, alpha in zip(vals, alphas)]
+
     
     if plot:
         ax.scatter( x, y, color=colours, s=size)
