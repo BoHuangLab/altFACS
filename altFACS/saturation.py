@@ -60,3 +60,34 @@ def maskSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
         print('Unsaturated events =', len(mask.dropna()))
 
     return mask
+
+# Iterate through channels
+def tagSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
+    '''tag events with values outside channel limits by adding a boolean 'Saturated' column to the DataFrame.'''
+    
+    # Get **kwargs
+    verbose     = kwargs.get('verbose', False)
+    
+    if verbose:
+        print('Input events =', len(df))
+        
+    # Use pd.DataFrame.copy() otherwise you will generate a view which will get overwritten
+    saturated = df.copy()
+
+    channels = list(limit_dict.keys())
+
+    #For each channel is event within limits?
+    for channel in df.columns:
+        if channel in channels:
+
+            # Retrive channel specific limits from dictionary
+            lower = limit_dict[channel]['lower_limit']
+            upper = limit_dict[channel]['upper_limit']
+
+            # Identify saturation in each channel
+            saturated[channel] = ~df[channel].between(lower, upper, inclusive = False)
+
+            # tag events with saturation in one or more channels
+            df.loc[:, 'Saturated'] = saturated.loc[:,saturated.columns.isin(channels)].any(axis=1)
+
+    return df
