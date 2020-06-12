@@ -58,7 +58,7 @@ def contourPlot(data: pd.DataFrame, x: str, y: str, poly: plt.Polygon, **kwargs)
     ringcolor = kwargs.get('contour_ring_color', 'magenta')
     save      = kwargs.get('save', False)
     savepath  = kwargs.get('savepath', './')
-    polyfill      = kwargs.get('polygon_fill', False)
+    polyfill  = kwargs.get('polygon_fill', False)
     
     #Set plot kwarg to True
     kwargs['plot'] = True
