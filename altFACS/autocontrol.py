@@ -35,7 +35,7 @@ def processControl(control: pd.DataFrame, **kwargs):
         return
     
     #Plot raw events
-    kwargs['title'] = 'step1_raw_events'
+    plot_settings['title'] = 'step1_raw_events'
     densityScatterPlot(control, 'FSC-A', 'SSC-A', **plot_settings);
     plt.title('Raw Events');
     plt.show()
@@ -76,7 +76,7 @@ def processControl(control: pd.DataFrame, **kwargs):
     plt.close()
 
     ## contourPlot
-    kwargs['title'] = 'step2_unsaturated_events'
+    plot_settings['title'] = 'step2_unsaturated_events'
     contourPlot(unsaturated, 'FSC-A', 'SSC-A', poly, **plot_settings)
     plt.title('Unsaturated Events');
     plt.show()
