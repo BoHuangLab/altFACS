@@ -8,7 +8,7 @@ from altFACS.contours import *
 from altFACS.singlets import *
 
 def processControl(control: pd.DataFrame, **kwargs):
-    '''determine scatter and singlet gates based on control data'''
+    '''determine and present scatter and singlet gates based on control data'''
     
     #Get **kwargs
     limit_dict = kwargs.get('limit_dict', None)
@@ -22,7 +22,7 @@ def processControl(control: pd.DataFrame, **kwargs):
     assert 0 < singlet_quantile < 1
        
     #Define plot settings
-    plot_settings = {plot, save, savepath} 
+    plot_settings = {'plot': plot, 'save': save, 'savepath': savepath} 
     
     # Step [1] - Mask saturation
 
@@ -39,9 +39,25 @@ def processControl(control: pd.DataFrame, **kwargs):
     densityScatterPlot(control, 'FSC-A', 'SSC-A', **plot_settings);
     plt.title('Raw Events');
     plt.show()
+    
+    #Load limit_dict. - Temporary
+    if limit_dict is None:
+        test_data_dir  = r"C:/Users/David Brown/Documents/PythonScripts_New/FACS/alternativeFACS/tests/"
+        test_data_name = "example_18bit_limit_dict.json"
+
+        with open(test_data_dir+test_data_name, 'r') as json_file:
+            limit_dict = json.load(json_file)
         
-    mask = maskSaturation(control, limit_dict, verbose)
-    unsaturated = mask.dropna()
+    mask = tagSaturation(control, limit_dict, verbose=False)
+    
+    # Awkwardly plot 
+    mask[mask.Saturated].plot('FSC-A', 'SSC-A', kind='scatter', c='b', s=1, alpha=0.1);
+    densityScatterPlot(mask[~mask.Saturated], 'FSC-A', 'SSC-A');
+    plt.title('Mask Saturated Events');
+    plt.show()
+    
+    # Drop Saturated
+    unsaturated = mask.drop(mask[mask.Saturated].index)
     
     ##Count unsaturated
     unsaturated_events = len(unsaturated)
@@ -71,6 +87,24 @@ def processControl(control: pd.DataFrame, **kwargs):
     ## Get scatter gated events
     scatter = unsaturated[unsaturated['Scatter+']].copy()
     
+    ## Set transparancy by scatter gate
+    alpha_dict = {True:1, False: 0.05}
+
+    # Map alpha values onto 'Scatter+'
+    transparencies = list(unsaturated['Scatter+'].map(alpha_dict))
+    
+    ringcolor = 'magenta'
+    polyfill  = None
+    
+    # Plot to show scatter gating
+    densityScatterPlot(unsaturated, 'FSC-A', 'SSC-A', alphas=transparencies)
+    #Define polygon
+    poly = Polygon(poly.xy, edgecolor = ringcolor, fill=polyfill)
+    
+    plt.gca().add_patch(poly);
+    plt.title('Scatter Gated Events');
+    plt.show()
+    
     ##Count scatter_gated_events
     scatter_gated_events = len(scatter)
     
@@ -82,21 +116,46 @@ def processControl(control: pd.DataFrame, **kwargs):
         print('Control has',scatter_gated_events, ' scatter gated events')
         percent_scatter_gated = scatter_gated_events / total_events * 100
         print(round(percent_scatter_gated, 2),'% of total events remaining')
-
+    
+    #Plot scatter gate events on new axis
+    densityScatterPlot(scatter, 'FSC-A', 'FSC-H', **plot_settings)
+    plt.title('Scatter Gated Events');
+    plt.show()
+        
     ## Get singlet threshold
     singlet_threshold = singletThreshold(scatter, singlet_quantile)
-
-    #Plot singlets
-    kwargs['title'] = 'step3_singlet_events'
-    singletPlot(scatter, singlet_threshold, **plot_settings);
-    plt.title('Singlet Plot');
-    plt.show()
     
     ## Gate singlets
-    singletGate(unsaturated, singlet_threshold)
+    singletGate(scatter, singlet_threshold)
+
+    ## Set transparancy by scatter gate
+    alpha_dict = {True:1, False: 0.1}
+
+    # Map alpha values onto 'Scatter+'
+    transparencies = list(scatter['Singlet+'].map(alpha_dict))
+    
+    #Plot singlets
+    densityScatterPlot(scatter, 'FSC-A', 'FSC-H', alphas=transparencies)
+
+    linecolour='magenta'
+
+    x=scatter['FSC-A']
+
+    x=list(x.sort_values().reset_index(drop=True))
+
+    xp_min = x[0]-1000
+    xp_max = x[-1]+1000
+    yp_min = singlet_threshold*xp_min
+    yp_max = singlet_threshold*xp_max
+
+    # draw threshold line
+    plt.plot([xp_min, xp_max], [yp_min, yp_max], c = linecolour);
+    plt.title('Singlet Events');
+    plt.show()
+    
     
     # Get singlets
-    singlets = unsaturated[unsaturated["Singlet+"]].copy()
+    singlets = scatter[scatter["Singlet+"]].copy()
     
     # Count singlet events
     singlet_events = len(singlets)
