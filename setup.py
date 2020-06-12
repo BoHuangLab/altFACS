@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="altFACS",                          #100% required
-    version="1.0.5",                         #100% required
+    version="1.0.6",                         #100% required
     description="FACS tools for split fluorescent proteins",
     long_description=README,
     long_description_content_type="text/markdown",
