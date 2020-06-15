@@ -61,7 +61,7 @@ def maskSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
 
     return mask
 
-# Iterate through channels
+
 def tagSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
     '''tag events with values outside channel limits by adding a boolean 'Saturated' column to the DataFrame.'''
     
@@ -91,3 +91,26 @@ def tagSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
             df.loc[:, 'Saturated'] = saturated.loc[:,saturated.columns.isin(channels)].any(axis=1)
 
     return df
+
+
+def makeLimitDict(channels: list, **kwargs):
+    '''make a limit_dictionary from a list of channels'''
+    
+    # Get **kwargs
+    verbose     = kwargs.get('verbose', False)
+    lower_limit = kwargs.get('lower_limit', 0)
+    upper_limit = kwargs.get('upper_limit', 262143.0)
+    
+    #Initialise dictionary
+    limit_dict=dict()
+
+    #For each channel is event within limits?
+    for channel in channels:
+        
+        if verbose:
+            print('Generating limts for ', channel)
+
+        # Set channel specific limits
+        limit_dict[channel]= {'lower_limit': lower_limit, 'upper_limit': upper_limit}
+
+    return limit_dict
