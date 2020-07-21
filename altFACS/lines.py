@@ -141,12 +141,10 @@ def rescalePlot(data, x_channel:str, y_channel:str, slope:float, intercept:float
 def piecewise_linear(x, x0, y0, k1, k2):
     return np.piecewise(x, [x < x0], [lambda x:k1*x + y0-k1*x0, lambda x:k2*x + y0-k2*x0])
 
-def zeroSlopeFirst(df: pd.DataFrame, file_num: int, x: str, y: str, **kwargs):
+def zeroSlopeFirst(df: pd.DataFrame, x: str, y: str, **kwargs):
     
-    data = df[df.File.eq(file_num)]
-
-    x=data[x]
-    y=data[y]
+    x=df[x]
+    y=df[y]
 
     s     = kwargs.get('s', 2)
     c     = kwargs.get('c', 'green')
@@ -181,7 +179,7 @@ def zeroSlopeFirst(df: pd.DataFrame, file_num: int, x: str, y: str, **kwargs):
     return k1_fixed, k2, x0, e
 
 
-def fitGated(df: pd.DataFrame, file_num: int, x_channel: str, y_channel: str, **kwargs):
+def fitGated(df: pd.DataFrame, x_channel: str, y_channel: str, **kwargs):
     """
     Plot and fit data accurately despite a sharp artifical cut off.
     
@@ -192,14 +190,13 @@ def fitGated(df: pd.DataFrame, file_num: int, x_channel: str, y_channel: str, **
     
     """
     
-    s     = kwargs.get('s', 2)
-    c     = kwargs.get('c', 'green')
-    alpha = kwargs.get('s', 0.1)
-    
-    data = df[df.File.eq(file_num)]
-    
-    x=data[x_channel]
-    y=data[y_channel]
+    s         = kwargs.get('s', 2)
+    c         = kwargs.get('c', 'green')
+    linecolor = kwargs.get('linecolor', 'magenta')
+    alpha     = kwargs.get('s', 0.1)
+       
+    x=df[x_channel]
+    y=df[y_channel]
 
     plt.scatter(x, y, s=s, alpha=alpha, c=c)
     plt.xlim(1,5);
@@ -221,6 +218,6 @@ def fitGated(df: pd.DataFrame, file_num: int, x_channel: str, y_channel: str, **
 
     yy = xx.apply(lambda xx: gradient*xx+offset)
 
-    plt.plot(xx, yy, c='red');
+    plt.plot(xx, yy, c=linecolor);
     
     return gradient, offset, p_value, std_err
