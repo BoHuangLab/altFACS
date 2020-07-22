@@ -221,3 +221,8 @@ def fitGated(df: pd.DataFrame, x_channel: str, y_channel: str, **kwargs):
     plt.plot(xx, yy, c=linecolor);
     
     return gradient, offset, p_value, std_err
+
+
+def add_slope(x, y, slope, sigfig=2, c='k'):
+    
+    plt.text(x, y, s='Slope = '+str(round(slope, sigfig)), c=c);
