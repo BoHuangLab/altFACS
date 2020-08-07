@@ -26,8 +26,8 @@ setup(
     include_package_data=True,
     install_requires=["fcsparser",
         "numpy",
-        "pandas"
+        "pandas",
         "matplotlib",
-        "pickleshare"
+        "pickleshare",
         "scipy"]
 )
