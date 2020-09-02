@@ -96,14 +96,77 @@ def plotFit(data, x_channel, y_channel, **kwargs):
     
 
 def rescale(y, slope:float, intercept: float):
-    ''' rescale data based on a control fit'''
+    ''' 
+    Rescale data based on parameters from a control fit
+    
+    
+    Parameters:
+    y: y values
+        
+    slope: float
+    The slope or gradient of the line you want to normalise
+    
+    intercept:
+    the intercept of offset of the line you want to normalise
+    
+    
+    Returns:
+    yy: 
+    Rescaled or normalised y values
+    '''
     
     yy = (y-intercept)/slope
     
     return yy
 
 def rescalePlot(data, x_channel:str, y_channel:str, slope:float, intercept:float, **kwargs):
-    """  """
+    """  
+    Plot rescaled or 'normalised' y values without altering the input DataFrame.
+    
+    Parameters:
+    data: pd.DataFrame
+    
+    x_channel: str
+    The name of the column containing x values
+
+    y_channel: str
+    The name of the column containing y values
+    
+    slope: float
+    The slope or gradient of the line you want to normalise
+    
+    intercept:
+    the intercept of offset of the line you want to normalise
+    
+    Optional Parameters:
+    s: int
+    marker size
+    
+    c: str
+    color
+    
+    alpha: float (0-1)
+    marker transparancy
+    
+    x_limits: tuple (lower, upper)
+    
+    y_limits: tuple (lower, upper)
+    
+    x_label: str
+    x axis label. Defaults to x_channel
+       
+    y_label: str
+    y axis label. Defaults to y_channel
+    
+    diagonal_color: str
+    choose the color of the diagonal line
+    
+    
+    Returns:
+    None. Just plots the graph
+    
+    
+    """
     
     
     x = data[x_channel]
@@ -142,6 +205,47 @@ def piecewise_linear(x, x0, y0, k1, k2):
     return np.piecewise(x, [x < x0], [lambda x:k1*x + y0-k1*x0, lambda x:k2*x + y0-k2*x0])
 
 def zeroSlopeFirst(df: pd.DataFrame, x: str, y: str, **kwargs):
+    '''
+    Fit data with a model comprised to two linear sections,
+    where the first section has a fixed gradient of 0.
+    
+    This function is intended to fit data, where the intensity on the y axis is initially below the background.
+    
+    
+    Parameters:
+    df:
+    
+    x:
+    
+    y:
+    
+    Optional Parameters:
+    s: int
+    marker size
+    
+    c: str
+    color
+    
+    alpha: float (0-1)
+    marker transparancy
+    
+    p0: list of length 3
+    
+    k1_fixed: float
+    Fixed gradient of the first section. Default is 0.
+    
+    
+    Returns:
+    k1_fixed:
+    
+    k2:
+    
+    x0: 
+    
+    e:
+    error
+    
+    '''
     
     x=df[x]
     y=df[y]
