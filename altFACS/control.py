@@ -9,10 +9,59 @@ from altFACS.contours import *
 from altFACS.singlets import *
 
 def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
-    '''determine scatter and singlet gates based on control data'''
+    '''determine scatter and singlet gates based on control data
+    
+    Parameters:
+    control: pd.DataFrame
+    A control sample from this experiment. This should have the fewest perturbations and the least dead cells.
+    
+    limit_dict: dict
+    A dictionary defining the minimum and maximum values for each channels. 
+    This will be used to remove saturation, by excluding events outside this set of limits.
+    Events outside the limits in any channel will be excluded from further analysis in all channels.
+    
+    Optional Parameters:
+    plot: Boolean (True/False)
+    Would you like to see plots in the notebook
+    
+    square: Boolean (True/False)
+    Would you like to fix the xy aspect ratio to 1. 
+    Square plots are the prefered presentation style for line fitting.
+    
+    verbose: Boolean (True/False)
+    Would you like the events counts to be printed out?
+    
+    save: Boolean (True/False)
+    Would you like the plots to be saved?
+    
+    savepath: str
+    Where would you like the plots to be saved?
+    
+    singlet_quantile: float (Between 0 and 1)
+    
+    Returns:
+    singlet_threshold:
+    The 
+    
+    poly: plt.patches.Poly
+    The polygon gate, intended to contain living cells.
+    
+    event_gating:
+    A list of the number of events at each step
+    0. total_events 
+    1. unsaturated_events
+    2. scatter_gated_events
+    3. singlet_events  
+    
+    singlets: pd.DataFrame
+    Events passing all of gating critera, intended to represent distinct living cells
+    
+    
+    '''
     
     #Get **kwargs
     plot       = kwargs.get('plot', False)
+    square     = kwargs.get('square', False)
     verbose    = kwargs.get('verbose', True)
     save       = kwargs.get('save', False)
     savepath   = kwargs.get('savepath', './')
