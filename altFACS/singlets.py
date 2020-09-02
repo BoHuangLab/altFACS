@@ -5,11 +5,36 @@ import matplotlib.pyplot as plt
 
 from altFACS.density  import *
 
-def singletThreshold(data: pd.DataFrame, singlet_quantile, verbose=True)->float:
-    '''Return the singlet ratio for a given quantile.'''
+def singletThreshold(data: pd.DataFrame, singlet_quantile: float, verbose=True)->float:
+    '''
+    Return the singlet ratio for a given quantile.
+    Intended to help distinguish and exclude flow cytometry events containing more than one cell.
+    
+    Parameters:
+    data: pd.DataFrame
+    Must contain columns labelled 'FSC-A' and 'FSC-H'
+    
+    singlet_quantile:float (0-1)
+    What fraction of events would you like to exclude? 
+    The higher the fraction, the more stringent, but the fewer events will be left.
+    
+    verbose:
+    Would you like to print the calculated singlet threshold?
+    
+    
+    Returns:
+    singlet_threshold
+    
+    
+    To Do:
+    Add options for other singlet gating methods.
+    
+    
+    '''
     
     assert 'FSC-A' in data.columns
     assert 'FSC-H' in data.columns
+    assert 0 < singlet_quantile < 1
 
     x = data['FSC-A']
     y = data['FSC-H']
@@ -25,7 +50,48 @@ def singletThreshold(data: pd.DataFrame, singlet_quantile, verbose=True)->float:
 
 
 def singletPlot(data: pd.DataFrame, singlet_threshold: float, **kwargs):
-    '''Plot events above and below the singlet Threshold'''
+    '''
+    Plot events above and below the singlet Threshold.
+    
+    
+    Parameters:
+    data: pd.DataFrame
+    Must contain columns labelled 'FSC-A' and 'FSC-H'
+    
+    singlet_threshold: float
+    Intended to accept the singlet_threshold value output by singletThreshold()
+    
+    Optional Parameters:
+    plot: Boolean (True/False)
+    Do you want to see the plots?
+    
+    linecolour: str
+    Color of the threshold line
+    
+    xlabel: str
+    
+    ylabel: str
+    
+    title: str
+    
+    s: float
+    Marker size
+    
+    doublet_color: str
+    Color of markers below threshold
+    
+    doublet_alpha: float
+    Transparency of markers below threshold
+    
+    save: Boolean (True/False)
+    Do you want to save the plots?
+    
+    savepath: str
+    Where do you want to save the plots?
+    
+    
+    
+    '''
     
     assert 'FSC-A' in data.columns
     assert 'FSC-H' in data.columns
@@ -33,10 +99,10 @@ def singletPlot(data: pd.DataFrame, singlet_threshold: float, **kwargs):
     #Get **kwargs
     plot          = kwargs.get('plot', True)
     linecolour    = kwargs.get('linecolour', 'magenta')
-    xlabel        = kwargs.get('xlabel', 'Forward Scatter Area')
-    ylabel        = kwargs.get('ylabel', 'Forward Scatter Height')
+    xlabel        = kwargs.get('xlabel', 'FSC-A')
+    ylabel        = kwargs.get('ylabel', 'FSC-H')
     title         = kwargs.get('title', 'singletPlot_figure')
-    size          = kwargs.get('size', 3)
+    s             = kwargs.get('s', 3)
     doublet_color = kwargs.get('doublet_color', 'blue')
     doublet_alpha = kwargs.get('doublet_alpha', 0.1)
     save          = kwargs.get('save', False)
@@ -99,7 +165,28 @@ def singletPlot(data: pd.DataFrame, singlet_threshold: float, **kwargs):
 
     
 def singletGate(data: pd.DataFrame, singlet_threshold: float, **kwargs):
-    '''Add boolean Singlet-Gate indicating events above the singlet ratio.'''
+    '''
+    Add boolean Singlet-Gate indicating events above the singlet ratio.
+    
+   
+    Parameters:
+    data: pd.DataFrame
+    Must contain columns labelled 'FSC-A' and 'FSC-H'
+    
+    singlet_threshold: float
+    Intended to accept the singlet_threshold value output by singletThreshold()
+    
+    Optional Parameters:
+    verbose: Boolean (True/False)
+    Would you like the number of Singlet gated events to be printed?
+    
+    
+    Returns:
+    data: pd.DataFrame
+    The original DateFrame with an additional column 'Singlet+'.
+    
+    
+    '''
     
     assert 'FSC-A' in data.columns
     assert 'FSC-H' in data.columns
