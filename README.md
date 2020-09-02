@@ -13,7 +13,7 @@ Flow cytometry and fluorescence activated cell sorting (FACS) are more frequentl
 
 ## Installation
 Currently, altFACS is available on GitHub or on the [test.Pypi](https://test.pypi.org/project/altFACS/1.0.7/) site. 
-Most [requirements](https://github.com/BoHuangLab/altFACS/blob/master/requirements.txt) will install automatically, but you may need to install fcsparser before installing altFACS.
+Most [requirements](https://github.com/BoHuangLab/altFACS/blob/master/requirements.txt) will install automatically, but you may need to install [fcsparser](https://github.com/eyurtsev/fcsparser) before installing altFACS.
 
 
 
