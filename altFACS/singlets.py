@@ -74,7 +74,7 @@ def singletPlot(data: pd.DataFrame, singlet_threshold: float, **kwargs):
     
     title: str
     
-    s: float
+    size: float
     Marker size
     
     doublet_color: str
@@ -102,7 +102,7 @@ def singletPlot(data: pd.DataFrame, singlet_threshold: float, **kwargs):
     xlabel        = kwargs.get('xlabel', 'FSC-A')
     ylabel        = kwargs.get('ylabel', 'FSC-H')
     title         = kwargs.get('title', 'singletPlot_figure')
-    s             = kwargs.get('s', 3)
+    size          = kwargs.get('size', 3)
     doublet_color = kwargs.get('doublet_color', 'blue')
     doublet_alpha = kwargs.get('doublet_alpha', 0.1)
     save          = kwargs.get('save', False)
