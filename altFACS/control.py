@@ -84,6 +84,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
         plt.title('Raw Events');
         
         if squareplot:
+            plt.axis('square')
             plt.gca().set_aspect('equal');
             plt.ticklabel_format(style='sci', scilimits=(0,0));
         plt.show()
@@ -114,6 +115,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
         plt.title('Unsaturated Events');
 
         if squareplot:
+            plt.axis('square')
             plt.gca().set_aspect('equal');
             plt.ticklabel_format(style='sci', scilimits=(0,0));
         plt.show()
@@ -145,6 +147,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
         plt.title('Singlet Plot');
         
         if squareplot:
+            plt.axis('square')
             plt.gca().set_aspect('equal');
             plt.ticklabel_format(style='sci', scilimits=(0,0));
         plt.show()
