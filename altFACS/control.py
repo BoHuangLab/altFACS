@@ -85,7 +85,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
         plt.title('Raw Events');
 
     mask = maskSaturation(control, limit_dict, **kwargs)
-    unsaturated = mask.dropna()
+    unsaturated = mask.dropna().copy() #explicit copy to avoid SettingWithCopyWarning
     
     ##Count unsaturated
     unsaturated_events = len(unsaturated)
@@ -115,7 +115,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     scatterGate(unsaturated, poly, verbose=True)
     
     ## Get scatter gated events
-    scatter = unsaturated[unsaturated['Scatter+']].copy()
+    scatter = unsaturated[unsaturated['Scatter+']].copy() #explicit copy to avoid SettingWithCopyWarning
     
     ##Count scatter_gated_events
     scatter_gated_events = len(scatter)
@@ -143,7 +143,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     singletGate(unsaturated, singlet_threshold)
     
     # Get singlets
-    singlets = unsaturated[unsaturated["Singlet+"]].copy()
+    singlets = unsaturated[unsaturated["Singlet+"]].copy() #explicit copy to avoid SettingWithCopyWarning
     
     # Count singlet events
     singlet_events = len(singlets)
