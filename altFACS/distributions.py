@@ -19,7 +19,25 @@ from scipy import stats
 from scipy import optimize
 
 def resample(data1: pd.DataFrame, data2: pd.DataFrame, channel: str, bins: list):
-    """Correct data2 distribution by resampling to correct for data1 distribtion."""
+    """
+    Correct data2 distribution by resampling to correct for data1 distribtion.
+    
+    Parameters:
+    data1: pd.DataFrame
+    
+    data2: pd.DataFrame
+    
+    channel: str
+    Column name of the values for resampling.
+    Should be present in data1 and data2
+    
+    bins: list
+    
+    
+    Returns:
+    resampled: pd.DataFrame    
+    
+    """
     
     #add bins to the dataframe
     data1.loc[:,'bin'] = pd.cut(data1[channel], bins)
@@ -72,7 +90,23 @@ def resample(data1: pd.DataFrame, data2: pd.DataFrame, channel: str, bins: list)
 
 
 def distributionCorrection(df, channel):
-    """Resample file pairs in a dataframe."""
+    """
+    Resample file pairs in a dataframe.
+    
+    df: pd.DataFrame
+    
+    channel: str
+    Column name of the values for resampling.
+    
+    
+    Returns:
+    estimated_true_positives: pd.DataFrame
+    
+    
+    To Do:
+    Make a more generic function, or at least pull out hardcoded variables
+    
+    """
 
     #Initialise list 
     estimated_true_positives = list()
