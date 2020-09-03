@@ -24,7 +24,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     plot: Boolean (True/False)
     Would you like to see plots in the notebook
     
-    square: Boolean (True/False)
+    squareplot: Boolean (True/False)
     Would you like to fix the xy aspect ratio to 1. 
     Square plots are the prefered presentation style for line fitting.
     
@@ -61,6 +61,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     
     #Get **kwargs
     plot       = kwargs.get('plot', False)
+    squareplot = kwargs.get('squareplot', False)
     square     = kwargs.get('square', False)
     verbose    = kwargs.get('verbose', True)
     save       = kwargs.get('save', False)
@@ -79,10 +80,13 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
     
     if plot:
         #Plot raw events
-        plt.figure(1)
-        kwargs['title'] = 'step1_raw_events'
         densityScatterPlot(control, 'FSC-A', 'SSC-A', **kwargs);
         plt.title('Raw Events');
+        
+        if squareplot:
+            plt.gca().set_aspect('equal');
+            plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.show()
 
     mask = maskSaturation(control, limit_dict, **kwargs)
     unsaturated = mask.dropna().copy() #explicit copy to avoid SettingWithCopyWarning
@@ -95,7 +99,7 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
         return
     
     if verbose:
-        print('Control has',unsaturated_events, ' unsaturated events')
+        print('Control has', unsaturated_events, ' unsaturated events')
         percent_unsaturated = unsaturated_events/ total_events * 100
         print(round(percent_unsaturated, 2),'% of total events remaining')
 
@@ -106,11 +110,14 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
 
     if plot:
         ## contourPlot
-        plt.figure(2)
-        kwargs['title'] = 'step2_unsaturated_events'
         contourPlot(unsaturated, 'FSC-A', 'SSC-A', poly, **kwargs)
         plt.title('Unsaturated Events');
-    
+
+        if squareplot:
+            plt.gca().set_aspect('equal');
+            plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.show()
+
     ## Add scatter gate 
     scatterGate(unsaturated, poly, verbose=True)
     
@@ -134,10 +141,13 @@ def processControl(control: pd.DataFrame, limit_dict: dict, **kwargs):
 
     if plot:
         #Plot singlets
-        plt.figure(3)
-        kwargs['title'] = 'step3_singlet_events'
         singletPlot(scatter, singlet_threshold, **kwargs);
         plt.title('Singlet Plot');
+        
+        if squareplot:
+            plt.gca().set_aspect('equal');
+            plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.show()
     
     ## Gate singlets
     singletGate(unsaturated, singlet_threshold)
