@@ -10,7 +10,6 @@ from altFACS.singlets import *
 def processControl(control: pd.DataFrame, **kwargs):
     '''determine and present scatter and singlet gates based on control data'''
     
-
     #Get **kwargs
     limit_dict = kwargs.get('limit_dict', None)
     plot       = kwargs.get('plot', False)
