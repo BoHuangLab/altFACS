@@ -7,16 +7,16 @@ from altFACS.density  import *
 from altFACS.contours import *
 from altFACS.singlets import *
 
+#change to process_control or processcontrol bc style guide
 def processControl(control: pd.DataFrame, **kwargs):
     '''determine and present scatter and singlet gates based on control data'''
-    
     #Get **kwargs
     limit_dict = kwargs.get('limit_dict', None)
     plot       = kwargs.get('plot', False)
     verbose    = kwargs.get('verbose', True)
     save       = kwargs.get('save', False)
     savepath   = kwargs.get('savepath', './')
-    
+
     singlet_quantile  = kwargs.get('singlet_quantile', 0.05)
 
     assert 0 < singlet_quantile < 1
@@ -82,6 +82,7 @@ def processControl(control: pd.DataFrame, **kwargs):
     plt.show()
 
     ## Add scatter gate
+    #set this equal to a new variable, use that for the rest of the code
     scatterGate(unsaturated, poly, verbose=True)
 
     ## Get scatter gated events
@@ -93,6 +94,10 @@ def processControl(control: pd.DataFrame, **kwargs):
     # Map alpha values onto 'Scatter+'
     transparencies = list(unsaturated['Scatter+'].map(alpha_dict))
 
+    #since you only use these once, its not totally necessary to
+    #define them as separate variables. You can just put them in them
+    #the function below, unless you intend on allowing the
+    #user to customize later on
     ringcolor = 'magenta'
     polyfill  = None
 
@@ -100,7 +105,7 @@ def processControl(control: pd.DataFrame, **kwargs):
     densityScatterPlot(unsaturated, 'FSC-A', 'SSC-A', alphas=transparencies)
     #Define polygon
     poly = Polygon(poly.xy, edgecolor = ringcolor, fill=polyfill)
-
+# might want to include options for a larger figure size here
     plt.gca().add_patch(poly);
     plt.title('Scatter Gated Events');
     plt.show()
@@ -126,6 +131,9 @@ def processControl(control: pd.DataFrame, **kwargs):
     singlet_threshold = singletThreshold(scatter, singlet_quantile)
 
     ## Gate singlets
+    #same as the function above. Don't write to old dataframes in functions
+    #if it's a memory concern, you can have these export new columns and append
+    #to your original dataframe
     singletGate(scatter, singlet_threshold)
 
     ## Set transparancy by scatter gate
@@ -135,12 +143,15 @@ def processControl(control: pd.DataFrame, **kwargs):
     transparencies = list(scatter['Singlet+'].map(alpha_dict))
 
     #Plot singlets
+    #see 133
     densityScatterPlot(scatter, 'FSC-A', 'FSC-H', alphas=transparencies)
 
+    #see 96
     linecolour='magenta'
 
+    #uncles variable name
     x=scatter['FSC-A']
-
+    #didn't need to do this in 2 lines
     x=list(x.sort_values().reset_index(drop=True))
 
     xp_min = x[0]-1000
