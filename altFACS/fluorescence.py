@@ -11,7 +11,7 @@ def transformFluorescenceChannels(df: pd.DataFrame, channels: list, transform, i
         return df
     
     else:
-        output = data.copy()
+        output = df.copy()
 
         for channel in channels:
             output.loc[:,channel] = transform(df.loc[:,channel])
