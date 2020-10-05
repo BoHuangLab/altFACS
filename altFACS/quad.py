@@ -5,9 +5,35 @@ import matplotlib.pyplot as plt
 
 from altFACS.density import densityScatterPlot
 
-def quadCounts(df, channel1, channel1_threshold, channel2, channel2_threshold):
-    '''function to count and return events in each quadrant'''
+def quadCounts(df: pd.DataFrame, channel1, channel1_threshold, channel2, channel2_threshold):
+    '''
+    function to count and return events in each quadrant
+    
+    Parameters:
+    df: pd.DataFrame
+    Input DataFrame containing channel1 and channel2 as columns.
+    
+    channel1: str
+    
+    channel2: str
+    
+    
+    Returns:
+    double_neg:
+    number of events below threshold in both channels
+    
+    c1_pos:
+    number of events above threshold in channel1, but below threshold in channel2
 
+    c2_pos:
+    number of events below threshold in channel1, but above threshold in channel2
+
+    double_pos:
+    number of events above threshold in both channels
+
+    '''
+
+    #These names are not very accurate. 
     double_neg = np.logical_and(df[channel1] <= channel1_threshold, df[channel2] <= channel2_threshold).sum()
     c1_pos     = np.logical_and(df[channel1] > channel1_threshold, df[channel2] <= channel2_threshold).sum()
     c2_pos     = np.logical_and(df[channel1] <= channel1_threshold, df[channel2] > channel2_threshold).sum()
@@ -18,8 +44,23 @@ def quadCounts(df, channel1, channel1_threshold, channel2, channel2_threshold):
     return double_neg, c1_pos, c2_pos, double_pos
 
 ##Quadrant plots
-def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshold, **kwargs):
-    '''function to generate a scatter plot with the quadrants annotated'''
+def quadPlot(df: pd.DataFrame, x_channel, x_channel_threshold, y_channel, y_channel_threshold, **kwargs):
+    '''
+    function to generate a scatter plot with the quadrants annotated
+    
+    Parameters:
+    
+    Returns:
+    double_neg: 
+    
+    c1_pos:
+    
+    c2_pos:
+    
+    double_pos:
+    
+    
+    '''
     
     #Get **kwargs
     plot       = kwargs.get('plot', True)
@@ -32,26 +73,27 @@ def quadPlot(data, x_channel, x_channel_threshold, y_channel, y_channel_threshol
     save       = kwargs.get('save', False)
     savepath   = kwargs.get('savepath', './')
     
-    double_neg, c1_pos, c2_pos, double_pos = quadCounts(data, x_channel, x_channel_threshold, y_channel, y_channel_threshold)
+    double_neg, c1_pos, c2_pos, double_pos = quadCounts(df, x_channel, x_channel_threshold, y_channel, y_channel_threshold)
     
     if plot==False:
         plt.ioff()
     
     if density:
-        densityScatterPlot(data, x_channel, y_channel, **kwargs);
+        densityScatterPlot(df, x_channel, y_channel, **kwargs);
     else:
-        data.plot.scatter(x=x_channel, y=y_channel, ax=ax, title=title);
+        df.plot.scatter(x=x_channel, y=y_channel, ax=ax, title=title);
         
     ax.axvline(x_channel_threshold);
     ax.axhline(y_channel_threshold);
     
     if percentage:
-        total=len(data)
+        total=len(df)
         dec = 2
     else:
         total=100
         dec=0
     
+    #Convert to rounded percentages
     Q1 = str(np.round((c2_pos/total)*100, dec))
     Q2 = str(np.round((double_pos/total)*100, dec))
     Q3 = str(np.round((double_neg/total)*100, dec))
