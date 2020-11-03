@@ -31,3 +31,14 @@ def channelGate(data, channels, thresholds_dict):
         #Should these modify the input or just return the booleans?
        
     return data
+
+
+def poly_gate(df, x_channel, y_channel, poly, gate_name):
+    
+    coords = np.array(df[[x_channel, y_channel]])
+
+    ##get polygon coordinates
+    p = path.Path(poly.get_xy())
+    
+    #Detect gated events
+    df.loc[:, gate_name] = p.contains_points(coords)
