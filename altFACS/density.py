@@ -7,8 +7,54 @@ from scipy.stats import gaussian_kde as kde
 from matplotlib.colors import Normalize
 from matplotlib import cm
 
-def densityScatterPlot(data: pd.DataFrame, x_channel: str, y_channel: str, **kwargs):
-    '''function to generate publication quality 2D-density plots from FACS data'''
+def densityScatterPlot(df: pd.DataFrame, x_channel: str, y_channel: str, **kwargs):
+    '''
+    function to generate publication quality 2D-density plots from FACS data
+    
+    Parameters:
+    df: pd.DataFrame
+    A dataframe containing your x and y values
+    
+    x_channel: str
+    The name of the column in df containing x values.
+    
+    y_channel: str
+    The name of the column in df containing y values.
+    
+    
+    Optional Parameters:
+    plot: bool
+    Should a graph be plotted? If no, you can just save it directly, with save=True.
+    
+    ax:
+    This allows densityScatterPlot to be called as a subplot.    
+    
+    title: str
+    What would you like to title your graph. Default = densityScatter_figure.
+
+    xlabel: str
+    What would you like to label your x_axis? Default = x_channel.
+    
+    ylabel: str
+    What would you like to label your y_axis? Default = y_channel.
+    
+    cmap: str
+    Which color map would you like to use to show the density of points? Default = jet
+    
+    alphas: 0-1
+    How transparent would you like the points?
+    
+    size: int?
+    How large would you like the points?
+   
+    save: bool
+    Would you like to save the figure? Default = False.
+    
+    savepath: str
+    Where would you like to save the figure?
+    
+    
+    '''
     
     #Get **kwargs
     plot      = kwargs.get('plot', True)
@@ -22,8 +68,8 @@ def densityScatterPlot(data: pd.DataFrame, x_channel: str, y_channel: str, **kwa
     save      = kwargs.get('save', False)
     savepath  = kwargs.get('savepath', './')
     
-    x = data[x_channel]
-    y = data[y_channel]
+    x = df[x_channel]
+    y = df[y_channel]
     
     #Calculate density
     densObj = kde( [x, y] )
