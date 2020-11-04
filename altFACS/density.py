@@ -88,7 +88,6 @@ def densityScatterPlot(df: pd.DataFrame, x_channel: str, y_channel: str, **kwarg
         # Convert look up colormap to a list of RGBA values for each point.
         colours = [cm.ScalarMappable( norm=norm, cmap=cmap).to_rgba(val, alpha) for val, alpha in zip(vals, alphas)]
 
-    
     if plot:
         ax.scatter( x, y, color=colours, s=size)
         ax.set_xlabel(xlabel);
