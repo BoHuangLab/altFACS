@@ -43,21 +43,39 @@ def quadCounts(df: pd.DataFrame, channel1, channel1_threshold, channel2, channel
     
     return double_neg, c1_pos, c2_pos, double_pos
 
+
 ##Quadrant plots
 def quadPlot(df: pd.DataFrame, x_channel, x_channel_threshold, y_channel, y_channel_threshold, **kwargs):
     '''
     function to generate a scatter plot with the quadrants annotated
     
     Parameters:
+    plot: bool 
+    Default = True.
     
-    Returns:
-    double_neg: 
+    ax:
+    This is useful to call quadPlot as a subplot.
     
-    c1_pos:
+    title: str      
+    What would you like to title your plot? Default = 'quadPlot_figure.pdf'.
     
-    c2_pos:
+    percentage: bool
+    Default = True.
     
-    double_pos:
+    density: bool     
+    Default = True.
+    
+    x_limits: tuple
+    (min, max). Default = (-1000,10000))
+    
+    y_limits:
+    (min, max). Default = (-1000,10000))
+    
+    save: bool      
+    Would you like to save the plot? Default = False.
+    
+    savepath: str
+    Where would you like the plot saved?
     
     
     '''
