@@ -64,6 +64,8 @@ def processControl(control: pd.DataFrame, **kwargs):
     
     #Get **kwargs
     limit_dict = kwargs.get('limit_dict', None)
+    contour    = kwargs.get('contour', 2)
+    population = kwargs.get('population', 0)
     plot       = kwargs.get('plot', False)
     squareplot = kwargs.get('squareplot', False)
     verbose    = kwargs.get('verbose', True)
@@ -76,7 +78,7 @@ def processControl(control: pd.DataFrame, **kwargs):
     assert 0 < singlet_quantile < 1
        
     #Define plot settings
-    plot_settings = {'plot': plot} 
+    plot_settings = {'plot': plot, 'contour': contour, 'population': population} 
     
     # Step [1] - Mask saturation
 
