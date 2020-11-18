@@ -71,7 +71,7 @@ def processControl(control: pd.DataFrame, **kwargs):
     assert 0 < singlet_quantile < 1
        
     #Define plot settings
-    plot_settings = {'plot': plot, 'save': save, 'savepath': savepath} 
+    plot_settings = {'plot': plot, 'save': save, 'savepath': savepath, 'square':squareplot} 
     
     # Step [1] - Mask saturation
 
@@ -87,13 +87,6 @@ def processControl(control: pd.DataFrame, **kwargs):
     plot_settings['title'] = 'step1_raw_events'
     densityScatterPlot(control, 'FSC-A', 'SSC-A', **plot_settings);
     plt.title('Raw Events');
-    
-    if squareplot:
-        plt.axis('square')
-        plt.gca().set_aspect('equal');
-        plt.ticklabel_format(style='sci', scilimits=(0,0));
-        plt.gca().set_xlim(left=0);
-        plt.gca().set_ylim(bottom=0);
     plt.show()
     
     #Load limit_dict. - Temporary
@@ -110,13 +103,6 @@ def processControl(control: pd.DataFrame, **kwargs):
     mask[mask.Saturated].plot('FSC-A', 'SSC-A', kind='scatter', c='b', s=1, alpha=0.1);
     densityScatterPlot(mask[~mask.Saturated], 'FSC-A', 'SSC-A');
     plt.title('Mask Saturated Events');
-    
-    if squareplot:
-        plt.axis('square')
-        plt.gca().set_aspect('equal');
-        plt.ticklabel_format(style='sci', scilimits=(0,0));
-        plt.gca().set_xlim(left=0);
-        plt.gca().set_ylim(bottom=0);
     plt.show()
     
     # Drop Saturated
@@ -142,13 +128,6 @@ def processControl(control: pd.DataFrame, **kwargs):
     plot_settings['title'] = 'step2_unsaturated_events'
     contourPlot(unsaturated, 'FSC-A', 'SSC-A', poly, **plot_settings)
     plt.title('Unsaturated Events');
-    
-    if squareplot:
-        plt.axis('square')
-        plt.gca().set_aspect('equal');
-        plt.ticklabel_format(style='sci', scilimits=(0,0));
-        plt.gca().set_xlim(left=0);
-        plt.gca().set_ylim(bottom=0);
     plt.show()
     
     ## Add scatter gate 
@@ -173,13 +152,6 @@ def processControl(control: pd.DataFrame, **kwargs):
     
     plt.gca().add_patch(poly);
     plt.title('Scatter Gated Events');
-
-    if squareplot:
-        plt.axis('square')
-        plt.gca().set_aspect('equal');
-        plt.ticklabel_format(style='sci', scilimits=(0,0));
-        plt.gca().set_xlim(left=0);
-        plt.gca().set_ylim(bottom=0);
     plt.show()
     
     ##Count scatter_gated_events
@@ -197,11 +169,6 @@ def processControl(control: pd.DataFrame, **kwargs):
     #Plot scatter gate events on new axis
     densityScatterPlot(scatter, 'FSC-A', 'FSC-H', **plot_settings)
     plt.title('Scatter Gated Events');
-    
-    if squareplot:
-        plt.axis('square')
-        plt.gca().set_aspect('equal');
-        plt.ticklabel_format(style='sci', scilimits=(0,0));
     plt.show()
         
     ## Get singlet threshold
@@ -233,11 +200,6 @@ def processControl(control: pd.DataFrame, **kwargs):
     # draw threshold line
     plt.plot([xp_min, xp_max], [yp_min, yp_max], c = linecolour);
     plt.title('Singlet Events');
-
-    if squareplot:
-        plt.axis('square')
-        plt.gca().set_aspect('equal');
-        plt.ticklabel_format(style='sci', scilimits=(0,0));
     plt.show()
     
     
