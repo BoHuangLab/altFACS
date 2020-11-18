@@ -92,6 +92,8 @@ def processControl(control: pd.DataFrame, **kwargs):
         plt.axis('square')
         plt.gca().set_aspect('equal');
         plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.gca().set_xlim(left=0);
+        plt.gca().set_ylim(bottom=0);
     plt.show()
     
     #Load limit_dict. - Temporary
@@ -113,6 +115,8 @@ def processControl(control: pd.DataFrame, **kwargs):
         plt.axis('square')
         plt.gca().set_aspect('equal');
         plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.gca().set_xlim(left=0);
+        plt.gca().set_ylim(bottom=0);
     plt.show()
     
     # Drop Saturated
@@ -143,6 +147,8 @@ def processControl(control: pd.DataFrame, **kwargs):
         plt.axis('square')
         plt.gca().set_aspect('equal');
         plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.gca().set_xlim(left=0);
+        plt.gca().set_ylim(bottom=0);
     plt.show()
     
     ## Add scatter gate 
@@ -172,6 +178,8 @@ def processControl(control: pd.DataFrame, **kwargs):
         plt.axis('square')
         plt.gca().set_aspect('equal');
         plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.gca().set_xlim(left=0);
+        plt.gca().set_ylim(bottom=0);
     plt.show()
     
     ##Count scatter_gated_events
