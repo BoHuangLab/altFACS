@@ -36,11 +36,15 @@ def processControl(control: pd.DataFrame, **kwargs):
     savepath: str
     Where would you like the plots to be saved?
     
+    dpi: int (Default is 300)
+    What resolution would you like saved images to be.
+    
     singlet_quantile: float (Between 0 and 1)
+    How stringent would you like your singlet gate to be
     
     Returns:
-    singlet_threshold:
-    The 
+    singlet_threshold: float
+    The 'FSC-H'/'FSC-A' ratio above which events are considered singlet.
     
     poly: plt.patches.Poly
     The polygon gate, intended to contain living cells.
@@ -65,13 +69,14 @@ def processControl(control: pd.DataFrame, **kwargs):
     verbose    = kwargs.get('verbose', True)
     save       = kwargs.get('save', False)
     savepath   = kwargs.get('savepath', './')
+    dpi        = kwargs.get('dpi', 300)
     
     singlet_quantile  = kwargs.get('singlet_quantile', 0.05)
     
     assert 0 < singlet_quantile < 1
        
     #Define plot settings
-    plot_settings = {'plot': plot, 'save': save, 'savepath': savepath, 'square':squareplot} 
+    plot_settings = {'plot': plot} 
     
     # Step [1] - Mask saturation
 
@@ -84,9 +89,20 @@ def processControl(control: pd.DataFrame, **kwargs):
         return
     
     #Plot raw events
-    plot_settings['title'] = 'step1_raw_events'
     densityScatterPlot(control, 'FSC-A', 'SSC-A', **plot_settings);
-    plt.title('Raw Events');
+    title = 'Raw Events'
+    plt.title(title);
+    
+    if squareplot:
+        plt.axis('square')
+        plt.gca().set_aspect('equal');
+        plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.gca().set_xlim(left=0);
+        plt.gca().set_ylim(bottom=0);
+    
+    if save:
+        plt.savefig(savepath+'1_'+title, dpi=dpi)
+        
     plt.show()
     
     #Load limit_dict. - Temporary
@@ -102,7 +118,19 @@ def processControl(control: pd.DataFrame, **kwargs):
     # Awkwardly plot 
     mask[mask.Saturated].plot('FSC-A', 'SSC-A', kind='scatter', c='b', s=1, alpha=0.1);
     densityScatterPlot(mask[~mask.Saturated], 'FSC-A', 'SSC-A');
-    plt.title('Mask Saturated Events');
+    title = 'Mask Saturated Events'
+    plt.title(title);
+    
+    if squareplot:
+        plt.axis('square')
+        plt.gca().set_aspect('equal');
+        plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.gca().set_xlim(left=0);
+        plt.gca().set_ylim(bottom=0);
+        
+    if save:
+        plt.savefig(savepath+'2_'+title, dpi=dpi)
+    
     plt.show()
     
     # Drop Saturated
@@ -127,7 +155,19 @@ def processControl(control: pd.DataFrame, **kwargs):
     ## contourPlot
     plot_settings['title'] = 'step2_unsaturated_events'
     contourPlot(unsaturated, 'FSC-A', 'SSC-A', poly, **plot_settings)
-    plt.title('Unsaturated Events');
+    title = 'Unsaturated Events'
+    plt.title(title);
+    
+    if squareplot:
+        plt.axis('square')
+        plt.gca().set_aspect('equal');
+        plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.gca().set_xlim(left=0);
+        plt.gca().set_ylim(bottom=0);
+        
+    if save:
+        plt.savefig(savepath+'3_'+title, dpi=dpi)    
+        
     plt.show()
     
     ## Add scatter gate 
@@ -151,7 +191,19 @@ def processControl(control: pd.DataFrame, **kwargs):
     poly = Polygon(poly.xy, edgecolor = ringcolor, fill=polyfill)
     
     plt.gca().add_patch(poly);
-    plt.title('Scatter Gated Events');
+    title = 'Scatter Gated Events'
+    plt.title(title);
+
+    if squareplot:
+        plt.axis('square')
+        plt.gca().set_aspect('equal');
+        plt.ticklabel_format(style='sci', scilimits=(0,0));
+        plt.gca().set_xlim(left=0);
+        plt.gca().set_ylim(bottom=0);
+        
+    if save:
+        plt.savefig(savepath+'4_'+title, dpi=dpi)       
+        
     plt.show()
     
     ##Count scatter_gated_events
@@ -168,7 +220,17 @@ def processControl(control: pd.DataFrame, **kwargs):
     
     #Plot scatter gate events on new axis
     densityScatterPlot(scatter, 'FSC-A', 'FSC-H', **plot_settings)
-    plt.title('Scatter Gated Events');
+    title = 'Scatter Gated Events'
+    plt.title(title);
+    
+    if squareplot:
+        plt.axis('square')
+        plt.gca().set_aspect('equal');
+        plt.ticklabel_format(style='sci', scilimits=(0,0));
+        
+    if save:
+        plt.savefig(savepath+'5_'+title, dpi=dpi)       
+        
     plt.show()
         
     ## Get singlet threshold
@@ -199,7 +261,17 @@ def processControl(control: pd.DataFrame, **kwargs):
 
     # draw threshold line
     plt.plot([xp_min, xp_max], [yp_min, yp_max], c = linecolour);
-    plt.title('Singlet Events');
+    title = 'Singlet Events'
+    plt.title(title);
+
+    if squareplot:
+        plt.axis('square')
+        plt.gca().set_aspect('equal');
+        plt.ticklabel_format(style='sci', scilimits=(0,0));
+    
+    if save:
+        plt.savefig(savepath+'6_'+title, dpi=dpi)
+        
     plt.show()
     
     
@@ -219,6 +291,6 @@ def processControl(control: pd.DataFrame, **kwargs):
         print(round(percent_singlet_gated, 2),'% of total events remaining')
     
     #Combine event counts into list
-    event_gating = [total_events, unsaturated_events, scatter_gated_events, singlet_events]           
+    event_gating = [total_events, unsaturated_events, scatter_gated_events, singlet_events]
     
     return singlet_threshold, poly, event_gating, singlets
