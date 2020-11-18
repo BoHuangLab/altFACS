@@ -46,6 +46,9 @@ def densityScatterPlot(df: pd.DataFrame, x_channel: str, y_channel: str, **kwarg
     
     size: int?
     How large would you like the points?
+    
+    square: bool
+    Would you like your plot in the square format?
    
     save: bool
     Would you like to save the figure? Default = False.
@@ -65,6 +68,7 @@ def densityScatterPlot(df: pd.DataFrame, x_channel: str, y_channel: str, **kwarg
     cmap      = kwargs.get('cmap', 'jet')
     alphas    = kwargs.get('alphas', None)
     size      = kwargs.get('size', 1)
+    square    = kwargs.get('square', False)
     save      = kwargs.get('save', False)
     savepath  = kwargs.get('savepath', './')
     
@@ -98,6 +102,11 @@ def densityScatterPlot(df: pd.DataFrame, x_channel: str, y_channel: str, **kwarg
         ax.scatter( x, y, color=colours, s=size)
         ax.set_xlabel(xlabel);
         ax.set_ylabel(ylabel);
+        
+    if square:
+        plt.axis('square')
+        ax.set_aspect('equal');
+        plt.ticklabel_format(style='sci', scilimits=(0,0));
         
     if save:
         plt.tight_layout()
