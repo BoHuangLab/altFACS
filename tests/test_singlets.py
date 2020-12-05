@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 import pandas as pd
-from altFACS.singlets  import *
+from ..altFACS.singlets  import *
 
 _threshold = 0.9888554097049977
 

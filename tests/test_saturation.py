@@ -33,7 +33,7 @@ class TestSaturation(unittest.TestCase):
         self.assertTrue(mask.equals(channel_A_mask), "Channel values at or beyond the upper or lower limits should be masked.")
 
     def test_maskSaturation(self):
-        mask = maskSaturation(df=test_df, limit_dict=test_dict)
+        mask = maskSaturation(df=test_df, limit_dict=test_dict, verbose=False)
         self.assertTrue(mask.equals(expected_mask_df), "Values at or beyond the limits for that channel should be masked.")
 
 # Test edge cases

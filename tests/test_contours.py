@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from altFACS.contours import *
+from ..altFACS.contours import *
 
 def test_getContours_gives_poly():
     """The getContours functions should return a matplotlib.patches.Polygon"""
