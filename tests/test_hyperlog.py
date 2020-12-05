@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from ..altFACS.hyperlog import *
+from altFACS.hyperlog import *
 
 #Define fixings (input data)
 test_array = np.array([-100, -10, -1, 0, 1, 10, 100, 1000, 10000])

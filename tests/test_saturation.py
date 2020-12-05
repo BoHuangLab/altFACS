@@ -1,8 +1,10 @@
+import sys
 import unittest
 
 import numpy as np
 import pandas as pd
-from ..altFACS.saturation import *
+
+from altFACS.saturation import *
 
 # Generate test DataFrame
 test_df   = pd.DataFrame()

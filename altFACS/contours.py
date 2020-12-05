@@ -102,3 +102,7 @@ def scatterGate(data: pd.DataFrame, poly: plt.Polygon, **kwargs)->pd.DataFrame:
         print('Scatter gated events =',scatter_gated_events) 
     
     return data
+
+# Run the main() function
+if __name__ == '__main__':
+    main()
