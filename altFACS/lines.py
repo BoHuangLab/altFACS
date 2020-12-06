@@ -328,5 +328,25 @@ def fitGated(df: pd.DataFrame, x_channel: str, y_channel: str, **kwargs):
 
 
 def add_slope(x, y, slope, sigfig=2, c='k'):
+    '''
+    Annotate the current plot with the gradient of the slope.
+    
+    Parameters:
+    x: float
+    The x coodinate for the annotation.
+    
+    y: float
+    The y coodinate for the annotation.
+    
+    slope: float
+    The gradient
+    
+    sigfig: int (>0)
+    How many significant figures should be printed?
+    
+    c: str
+    What color should the text be?
+    
+    '''
     
     plt.text(x, y, s='Slope = '+str(round(slope, sigfig)), c=c);
