@@ -23,7 +23,7 @@ def getContours(df: pd.DataFrame, x='FSC-A', y='SSC-A', **kwargs)->plt.Polygon:
     Name of x-axis column.
     
     y: str
-    Name of x-axis column.
+    Name of y-axis column.
     
     
     Optional Parameters:
@@ -92,7 +92,7 @@ def contourPlot(df: pd.dfFrame, x: str, y: str, poly: plt.Polygon, **kwargs):
     Name of x-axis column.
     
     y: str
-    Name of x-axis column.
+    Name of y-axis column.
     
     poly: matplotlib.patches.Polygon
     
