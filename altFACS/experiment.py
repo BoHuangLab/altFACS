@@ -7,8 +7,27 @@ from altFACS.saturation  import *
 from altFACS.contours import *
 from altFACS.singlets import *
 
-def processExperiment(experiment: pd.DataFrame, limit_dict: dict, polygon: plt.Polygon, singlet_threshold: float):
-    '''remove saturation, gate event scattering based on a supplied polygon and eliminate doublet events'''
+def processExperiment(experiment: pd.DataFrame, limit_dict: dict, polygon: matplotlib.patches.Polygon, singlet_threshold: float):
+    '''
+    remove saturation, gate event scattering based on a supplied polygon and eliminate doublet events
+    
+    Parameters:
+    experiment: pd.DataFrame
+    
+    limit_dict: dict
+    A dictionary of lower and upper values for each channel.
+    
+    polygon: matplotlib.patches.Polygon
+    
+    singlet_threshold: float
+    The FSC-H / FSC-A threshold above which events are considered singlet. Returned by processControl() or singletThreshold()
+    
+    
+    Returns:
+    singlets: pd.DataFrame
+    A subset of the input experiment dataframe, limited to singlet events.
+    
+    '''
     
     #[1] Remove saturation
     mask = maskSaturation(experiment, limit_dict)
