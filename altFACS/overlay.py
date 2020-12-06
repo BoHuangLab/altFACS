@@ -3,7 +3,61 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def overlayPlot(data1: pd.DataFrame, data2: pd.DataFrame, x_channel: str, y_channel: str, **kwargs):
-    '''function to generate a plot comparing mean signal across a number of bins'''
+    '''
+    Plot mean signal across a number of bins.
+    
+    Parameters:
+    data1: pd.DataFrame
+    A dataframe containing 'control' data. Set color with 'con_color'.
+    
+    data2: pd.DataFrame
+    A dataframe containing 'experimental' data. Set color with 'exp_color'.
+    
+    x_channel: str
+    The name of the column in df containing x values.
+    
+    y_channel: str
+    The name of the column in df containing y values.
+    
+    
+    Optional Parameters:
+    bins: int
+    Set the number of bins for the histogram.
+    
+    plot: bool (Default True)
+    Would you like to see the plot?
+    
+    title: str
+    What would you like to call the plot?
+    
+    con_color: str
+    What color would you like the control 'data1' to be?
+    
+    exp_color: str
+    What color would you like the experiment 'data2' to be?
+    
+    x_label: str
+    Label the x-axis.
+    
+    y_label: str
+    Label the y-axis.
+    
+    labels: list
+    Provide a list of labels for the key.
+    
+    xlim: list [low, high]
+    Set the x-axis limits.
+    
+    ylim: list [low, high]
+    Set the y-axis limits.
+    
+    save: bool (Default False)
+    Would you like to save the plot?
+    
+    savepath: str
+    Where would you like to save the plot?
+    
+    '''
     
     #Get **kwargs
     bins      = kwargs.get('bins', None)
@@ -54,14 +108,43 @@ def overlayPlot(data1: pd.DataFrame, data2: pd.DataFrame, x_channel: str, y_chan
         plt.close()
 
         
-def shiftPlot(data, control_file_index, experiment_file_index, channel='646nm', **kwargs):
+def shiftPlot(df, control_file_index, experiment_file_index, channel='646nm', **kwargs):
+    '''
+    Plot the kde for a control and an experiment on the same graph.
+    
+    Parameters:
+    df: pd.DataFrame
+    A dataframe containing 'control' and 'experiment' data values. 
+    Must have a 'File' column, to identify control and experimental data by file index.
+    
+    control_file_index: int
+    The File number of the control data in df.
+    
+    experiment_file_index: int
+    The File number of the experimental data in df.
+    
+    channel: str
+    Name the column of values you want to compare. e.g. 488nm.
+    
+    
+    Optional Parameters:
+    x_limits: tuple (low, high)
+    Set the x limits.
+    
+    control_color: str
+    Set the control color.
+    
+    channel_colors: dict
+    Pass a dictionary of colors for each channel. If unused, experiment will be plotted in black. 
+   
+    '''
     
     x_limits       = kwargs.get('x_limits', (-1000, 8000))
     control_color  = kwargs.get('control_color', 'lightgrey')
     channel_colors = kwargs.get('channel_colors', {})
     
-    control    = data[data.File.eq(control_file_index)]
-    experiment = data[data.File.eq(experiment_file_index)]
+    control    = df[df.File.eq(control_file_index)]
+    experiment = df[df.File.eq(experiment_file_index)]
     
     ##How do I overlay these?
     control[channel].plot.kde(color=control_color);
