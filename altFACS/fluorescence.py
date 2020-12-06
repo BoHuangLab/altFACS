@@ -3,7 +3,28 @@ import numpy as np
 import pandas as pd
 
 def transformFluorescenceChannels(df: pd.DataFrame, channels: list, transform, inplace=False)->pd.DataFrame:
-    '''Transform values in list'''
+    '''
+    Transform values in list of channels.
+    
+    Parameters:
+    df: pd.DataFrame
+    FACS data.
+    
+    channels: list
+    A list of channel names to transform. Typically FSC-A and SSC-A are not transformed.
+    
+    transform: function
+    The desired transform function. e.g. np.log10 or hlog.
+    
+    inplace: bool (Default False)
+    Overwrite input data?
+    
+    
+    Returns:
+    output: pd.DataFrame
+    Transformed FACS data. 
+    
+    '''
     
     if inplace:
         for channel in channels:
@@ -21,6 +42,26 @@ def transformFluorescenceChannels(df: pd.DataFrame, channels: list, transform, i
 def autothresholdChannel(df: pd.DataFrame, channel: str, **kwargs)->float:
     '''
     Determine a threshold of a channel by mean + n_stdevs * std or by a set percentile.
+    
+    Parameters:
+    df: pd.DataFrame
+    FACS data.
+    
+    channel: str
+    The name of the channel to transform. Typically FSC-A and SSC-A are not transformed.
+    
+    
+    Optional Parameters:
+    percentile: float
+    What percentile of events should be above the threshold?
+    
+    n_stdevs: float
+    The number of standard deviations from the mean to set the threshold. If used, this will override the percentile method.
+    
+    
+    Returns:
+    threshold: float
+    
     '''
     
     #Get **kwargs
@@ -40,7 +81,7 @@ def autothresholdChannel(df: pd.DataFrame, channel: str, **kwargs)->float:
 
 def autothreshold(df: pd.DataFrame, channels: list,  **kwargs)->dict:
     '''
-    threshold each channel in the list
+    Threshold each channel in the list.
     
     Parameters:
     df: pd.DataFrame
@@ -84,8 +125,25 @@ def autothreshold(df: pd.DataFrame, channels: list,  **kwargs)->dict:
 
 
 def channelGate(df: pd.DataFrame, channels: list, thresholds_dict: dict):
-    '''Add boolean gates for each channel in the list
+    '''
+    Add boolean gates for each channel in the list
     based on a dictionary of thresholds.
+    
+    Parameters:
+    df: pd.DataFrame
+    FACS data.
+    
+    channels: list
+    A list containing the column names for gating.
+    
+    thresholds_dict:
+    A dictionary of thresholds for gating each channel.
+    
+    
+    Returns:
+    df: pd.DataFrame
+    FACS data with additional boolean columns gating each event.
+    
     '''
     
     for channel in channels:
