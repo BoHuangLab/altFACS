@@ -4,14 +4,14 @@ import pandas as pd
 # Mask channel
 def maskChannelSaturation(df: pd.DataFrame, channel: str, lower: float, upper: float)-> pd.DataFrame:
     """
-    replace channel values below lower or above upper with NaN
-    
+    Replace channel values below lower or above upper with NaN.
+  
     Parameters:
     df: pd.DataFrame
-    data containing the column to be masked 
+    FACS data containing the column to be masked. 
     
     channel: str
-    the name of the column to be masked 
+    the name of the column to be masked. 
     
     lower: float
     the threshold below which, values will be replaced with NaN.
@@ -21,7 +21,7 @@ def maskChannelSaturation(df: pd.DataFrame, channel: str, lower: float, upper: f
     
     Returns:
     mask: pd.DataFrame
-    a dataframe like df except with values in df[channel] outside lower and upper replace with NaN.
+    a dataframe like df except with values in df[channel] outside lower and upper replaced with NaN.
     values are not removed so mask.shape == df.shape.
     
     """
@@ -32,7 +32,29 @@ def maskChannelSaturation(df: pd.DataFrame, channel: str, lower: float, upper: f
 
 # Iterate through channels
 def maskSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
-    '''replace values outside channel limits with NaN'''
+    '''
+    Replace values outside channel limits with NaN.
+    
+    Parameters:
+    df: pd.DataFrame
+    FACS data containing the columns to be masked.
+    
+    limit_dict: dict
+    A dictionary defining the minimum and maximum values for each channels. 
+    This will be used to remove saturation, by excluding events outside this set of limits.
+    Events outside the limits in any channel will be excluded from further analysis in all channels.
+    
+    Optional Parameters:
+    verbose: bool (Deafult True)
+    Print input events, and unsaturated events?
+    
+    
+    Returns:
+    mask: pd.DataFrame
+    A dataframe like df except with values outside limit_dict replaced with NaN.
+    Values are not removed so mask.shape == df.shape.
+    
+    '''
     
     # Get **kwargs
     verbose     = kwargs.get('verbose', True)
@@ -63,7 +85,29 @@ def maskSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
 
 
 def tagSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
-    '''tag events with values outside channel limits by adding a boolean 'Saturated' column to the DataFrame.'''
+    '''
+    Tag events with values outside channel limits by adding a boolean 'Saturated' column to the DataFrame.
+    
+    Parameters:
+    df: pd.DataFrame
+    FACS data containing the columns to be masked.
+    
+    limit_dict: dict
+    A dictionary defining the minimum and maximum values for each channels. 
+    This will be used to remove saturation, by excluding events outside this set of limits.
+    Events outside the limits in any channel will be excluded from further analysis in all channels.
+    
+    
+    Optional Parameters:
+    verbose: bool (Deafult True)
+    Print input events, and unsaturated events?
+    
+    
+    Returns:
+    df: pd.DataFrame
+    FACS data with a new boolean column 'Saturated'.
+    
+    '''
     
     # Get **kwargs
     verbose     = kwargs.get('verbose', False)
@@ -94,7 +138,24 @@ def tagSaturation(df: pd.DataFrame, limit_dict: dict, **kwargs):
 
 
 def makeLimitDict(channels: list, **kwargs):
-    '''make a limit_dictionary from a list of channels'''
+    '''
+    Make a limit_dictionary from a list of channels.
+    
+    Parameters:
+    channels: list
+    
+    lower_limit: float
+    
+    upper_limit: float
+    
+    
+    Returns:
+    limit_dict: dict
+    A dictionary defining the minimum and maximum values for each channels. 
+    This will be used to remove saturation, by excluding events outside this set of limits.
+    Events outside the limits in any channel will be excluded from further analysis in all channels.
+    
+    '''
     
     # Get **kwargs
     verbose     = kwargs.get('verbose', False)
