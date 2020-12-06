@@ -27,12 +27,12 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from scipy import optimize
 
-def plotFit(data, x_channel, y_channel, **kwargs):
+def plotFit(df, x_channel, y_channel, **kwargs):
     '''
     plot FACS with linear regression line
     
     Parameters:
-    data: pd.DataFrame
+    df: pd.DataFrame
     The data to be plotted and fit. 
     
     x_channel: str
@@ -41,9 +41,8 @@ def plotFit(data, x_channel, y_channel, **kwargs):
     y_channel: str
     The name of the column containing the y-coordinates. 
     
-    kwargs: dict
-    additional arguments to be passed to the scatter plot or line plot functions.
     
+    Optional Parameters:    
     s: int
     The size of the scatter plot markers
     
@@ -55,6 +54,7 @@ def plotFit(data, x_channel, y_channel, **kwargs):
     
     linecolor: str
     The color of the fit line.
+    
     
     Returns:
     slope: float
@@ -79,8 +79,8 @@ def plotFit(data, x_channel, y_channel, **kwargs):
     scatter_settings['c']      = kwargs.get('c', 'g')
     scatter_settings['alpha']  = kwargs.get('alpha', 0.2)
     
-    x = data[x_channel]
-    y = data[y_channel]
+    x = df[x_channel]
+    y = df[y_channel]
     
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
         
@@ -97,46 +97,46 @@ def plotFit(data, x_channel, y_channel, **kwargs):
 
 def rescale(y, slope:float, intercept: float):
     ''' 
-    Rescale data based on parameters from a control fit
-    
-    
+    Rescale data based on parameters from a control fit.
+        
     Parameters:
     y: y values
         
     slope: float
-    The slope or gradient of the line you want to normalise
+    The slope or gradient of the line you want to normalise.
     
     intercept:
-    the intercept of offset of the line you want to normalise
+    The intercept or offset of the line you want to normalise.
     
     
     Returns:
     yy: 
-    Rescaled or normalised y values
+    Rescaled or normalised y values.
+    
     '''
     
     yy = (y-intercept)/slope
     
     return yy
 
-def rescalePlot(data, x_channel:str, y_channel:str, slope:float, intercept:float, **kwargs):
+def rescalePlot(df, x_channel:str, y_channel:str, slope:float, intercept:float, **kwargs):
     """  
     Plot rescaled or 'normalised' y values without altering the input DataFrame.
     
     Parameters:
-    data: pd.DataFrame
+    df: pd.DataFrame
     
     x_channel: str
-    The name of the column containing x values
+    The name of the column containing x values.
 
     y_channel: str
-    The name of the column containing y values
+    The name of the column containing y values.
     
     slope: float
-    The slope or gradient of the line you want to normalise
+    The slope or gradient of the line you want to normalise.
     
     intercept:
-    the intercept of offset of the line you want to normalise
+    the intercept of offset of the line you want to normalise.
     
     Optional Parameters:
     s: int
@@ -169,8 +169,8 @@ def rescalePlot(data, x_channel:str, y_channel:str, slope:float, intercept:float
     """
     
     
-    x = data[x_channel]
-    y = data[y_channel]
+    x = df[x_channel]
+    y = df[y_channel]
     yy = rescale(y, slope, intercept)
     
     scatter_settings = {}
@@ -211,13 +211,16 @@ def zeroSlopeFirst(df: pd.DataFrame, x: str, y: str, **kwargs):
     
     This function is intended to fit data, where the intensity on the y axis is initially below the background.
     
-    
     Parameters:
-    df:
+    df: pd.DataFrame
+    FACS data.
     
-    x:
+    x: str
+    Name of x-axis column.
     
-    y:
+    y: str
+    Name of y-axis column.
+    
     
     Optional Parameters:
     s: int
@@ -291,6 +294,17 @@ def fitGated(df: pd.DataFrame, x_channel: str, y_channel: str, **kwargs):
     This can generate asymmetry (which fitting algorithms expect in y, but not in x),
     which biases the linear regression. One way to overcome this issue is to swap the axis before fitting, 
     and then reverse our equation.
+    
+    Parameters:
+    df: pd.DataFrame
+    FACS data.
+    
+    x: str
+    Name of x-axis column.
+    
+    y: str
+    Name of y-axis column.
+    
     
     """
     
