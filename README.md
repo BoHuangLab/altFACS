@@ -1,4 +1,7 @@
 # altFACS
+
+![GitHub](https://img.shields.io/github/license/BoHuangLab/altFACS)
+
 Author: David Brown
 
 Last Edited: 2020-August-07
