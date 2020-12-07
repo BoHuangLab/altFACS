@@ -22,9 +22,13 @@ class TestFlourescence(unittest.TestCase):
     def test_autothresholdChannel(self):
         
         # Use test_df to generate expected threshold with no kwargs
-        
         threshold_405nm = autothresholdChannel(test_df, '405nm')
         self.assertEqual(threshold_405nm, test_df['405nm'].quantile(0.999), "Threshold should be set at 99.9th percentile .")
+        
+        # Use test_df to generate expected threshold with percentile kwarg
+        test_percentile = 0.5
+        threshold_405nm = autothresholdChannel(test_df, '405nm', percentile=test_percentile)
+        self.assertEqual(threshold_405nm, test_df['405nm'].quantile(test_percentile), "Threshold should be set at 99.9th percentile .")
         
         # Use test_df to generate expected threshold with n_stdevs kwarg
         threshold_405nm = autothresholdChannel(test_df, '405nm', n_stdevs=1)
