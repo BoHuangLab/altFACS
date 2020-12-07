@@ -1,6 +1,7 @@
 # altFACS
 
-![GitHub](https://img.shields.io/github/license/BoHuangLab/altFACS)
+![build](https://github.com/BoHuangLab/altFACS/workflows/Project%20Tests/badge.svg)
+![License](https://img.shields.io/github/license/BoHuangLab/altFACS)
 
 Author: David Brown
 
