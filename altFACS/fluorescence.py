@@ -92,7 +92,7 @@ def autothreshold(df: pd.DataFrame, channels: list,  **kwargs)->dict:
     
     
     Optional Key Word Argument Parameters:
-    percentile: float
+    percentile: float (0-1)
     the percentile at which to set the threshold. This value will not be used if n_stdevs is given.
     
     n_stdevs: float
