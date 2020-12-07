@@ -80,7 +80,7 @@ def getContours(df: pd.DataFrame, x='FSC-A', y='SSC-A', **kwargs)->plt.Polygon:
     return poly
 
 
-def contourPlot(df: pd.dfFrame, x: str, y: str, poly: plt.Polygon, **kwargs):
+def contourPlot(df: pd.DataFrame, x: str, y: str, poly: plt.Polygon, **kwargs):
     '''
     A function to overlay the polygon gate on a densityScatterPlot.
     
