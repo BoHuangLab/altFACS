@@ -2,10 +2,14 @@ import unittest
 
 import numpy as np
 import pandas as pd
-# from ..altFACS.singlets  import *
+
 from altFACS.singlets  import *
 
-_threshold = 0.9888554097049977
+#Correct threshold
+# _threshold = 0.9888554097049977
+
+#Incorrect threshold
+_threshold = 0.4
 
 #Set the random seed to get a reproducible set of pseudorandom data
 np.random.seed(1)
