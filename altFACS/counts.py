@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def combineGates(df: pd.DataFrame, gate1: str, gate1: str):
+def combineGates(df: pd.DataFrame, gate1: str, gate2: str):
     '''
     Combine boolean 'gate' columns on annotated dataframe.
     
