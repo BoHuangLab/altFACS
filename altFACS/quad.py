@@ -14,9 +14,16 @@ def quadCounts(df: pd.DataFrame, channel1, channel1_threshold, channel2, channel
     Input DataFrame containing channel1 and channel2 as columns.
     
     channel1: str
+    Name the x-axis column.
+    
+    channel1_threshold: float
+    Set the x-axis threshold.
     
     channel2: str
+    Name the y-axis column.
     
+    channel2_threshold: float
+    Set the y-axis threshold.
     
     Returns:
     double_neg:
@@ -50,6 +57,22 @@ def quadPlot(df: pd.DataFrame, x_channel, x_channel_threshold, y_channel, y_chan
     function to generate a scatter plot with the quadrants annotated
     
     Parameters:
+    df: pd.DataFrame
+    Input DataFrame containing channel1 and channel2 as columns.
+    
+    x_channel: str
+    Name the x-axis column.
+    
+    x_channel_threshold: float
+    Set the x-axis threshold.
+    
+    y_channel: str
+    Name the y-axis column.
+    
+    y_channel_threshold: float
+    Set the y-axis threshold.
+    
+    Optional Parameters:
     plot: bool 
     Default = True.
     
