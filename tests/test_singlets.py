@@ -6,10 +6,10 @@ import pandas as pd
 from altFACS.singlets  import *
 
 #Correct threshold
-# _threshold = 0.9888554097049977
+_threshold = 0.9888554097049977
 
 #Incorrect threshold
-_threshold = 0.4
+# _threshold = 0.4
 
 #Set the random seed to get a reproducible set of pseudorandom data
 np.random.seed(1)
