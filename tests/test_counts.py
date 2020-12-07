@@ -14,8 +14,8 @@ test_df['488nm+'] = [False, True, False, True]
 # Define expected output
 output_df = test_df.copy()
 output_df['405nm_neg_488nm_neg'] = [True,  False, False, False]
-output_df['405nm_pos_488nm_neg'] = [False, False, True,  True ]
-output_df['405nm_neg_488nm_pos'] = [False, True,  False, True ]
+output_df['405nm_pos_488nm_neg'] = [False, False, True,  False]
+output_df['405nm_neg_488nm_pos'] = [False, True,  False, False]
 output_df['405nm_pos_488nm_pos'] = [False, False, False, True ]
 
 # Define aggregate for hitRate test
@@ -25,7 +25,7 @@ class TestCounts(unittest.TestCase):
 
     def test_combineGates(self):
 
-        self.assertTrue((combineGates(test_df, '405nm+', '488nm+') == output_df).all(), "Gates should be combined as expected")
+        self.assertTrue((combineGates(test_df, '405nm+', '488nm+') == output_df).all().all(), "Gates should be combined as expected")
 
     def test_hitRate(self):
         
