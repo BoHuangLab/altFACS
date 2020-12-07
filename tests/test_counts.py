@@ -29,7 +29,7 @@ class TestCounts(unittest.TestCase):
 
     def test_hitRate(self):
         
-        HR, FDR hitRate(agg, '405nm_neg_488nm_neg', '405nm_pos_488nm_neg', '405nm_neg_488nm_pos', '405nm_pos_488nm_pos')
+        HR, FDR = hitRate(agg, '405nm_neg_488nm_neg', '405nm_pos_488nm_neg', '405nm_neg_488nm_pos', '405nm_pos_488nm_pos')
         
         self.assertEqual(HR,  50.0, "With this input hit rate (%) should be 50.")
         self.assertEqual(FDR, 50.0, "With this input false detection rate (%) should be 50.")
