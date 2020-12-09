@@ -16,7 +16,7 @@ In the [Huang Lab](http://huanglab.ucsf.edu/) we are interested in developing ne
 Flow cytometry and fluorescence activated cell sorting (FACS) are more frequently used to distinguish cell populations based on a characteristic intensity profile. In our case we often use it to study how proteins behave at a range of concentrations. This alternative approach to FACS is the main purpose of the altFACS package.
 
 ## Example Plots:
-![Example altFACS plots](https://github.com/BoHuangLab/altFACS/blob/master/images/mNG3_mCloGFP_altFACS_example.png)
+![Example altFACS plots](https://github.com/BoHuangLab/altFACS/blob/main/images/mNG3_mCloGFP_altFACS_example.png)
 
 ### Example altFACS Plots:
 - **A.** Raw flow cytometry events. 
