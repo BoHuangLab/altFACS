@@ -32,7 +32,7 @@ class TestAutocontrol(unittest.TestCase):
 
     def test_processControl(self):
         # Run processControl with no kwargs
-        singlet_threshold, poly, event_gating, singlets = processControl(control)
+        singlet_threshold, poly, event_gating, singlets = processControl(test_df)
         
         # Check event gating
         self.assertTrue(event_gating.equals(expected_event_gating), "For this data set the events should match the expected gating.")
