@@ -5,8 +5,15 @@ The Huang Lab uses flow cytometry to investigate interactions between split fluo
 This module contains functions to resample distributions and quantifiy fold changes in FACS data.
 
 Functions:
+resample:
+distributionCorrection:
 
 Requirements:
+sys
+numpy
+pandas
+matplotlib
+scipy
 
 """
 
