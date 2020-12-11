@@ -256,8 +256,10 @@ def processControl(control: pd.DataFrame, **kwargs):
 
     x=list(x.sort_values().reset_index(drop=True))
 
-    xp_min = x[0]-1000
-    xp_max = x[-1]+1000
+    x_range = x[-1] - x[0]
+    
+    xp_min = x[0]-(x_range/10)               #pad scale to 1/10th of the range
+    xp_max = x[-1]+(x_range/10)              #pad scale to 1/10th of the range
     yp_min = singlet_threshold*xp_min
     yp_max = singlet_threshold*xp_max
 
