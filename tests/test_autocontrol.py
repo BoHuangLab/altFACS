@@ -35,7 +35,7 @@ class TestAutocontrol(unittest.TestCase):
 
     def test_processControl(self):
         # Run processControl with limit_dict kwarg
-        singlet_threshold, poly, event_gating, singlets = processControl(test_df, limit_dict=test_limit_dict)
+        singlet_threshold, poly, event_gating, singlets = processControl(test_df, limit_dict=test_limit_dict, plot=False)
         
         # Check event gating
         self.assertTrue((event_gating==expected_event_gating), "For this data set the events should match the expected gating.")
