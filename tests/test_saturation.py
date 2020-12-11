@@ -23,7 +23,7 @@ nan = np.nan
 channel_A_mask = pd.Series([nan, nan, nan, nan, 4.0, 5.0, 6.0, nan, nan, nan])
 channel_B_mask = pd.Series([nan, nan, nan, nan, nan, nan, nan, 7.0, nan, nan])
 
-# Define expected outpus as pd.DataFrame
+# Define expected outputs as pd.DataFrame
 expected_mask_df = pd.DataFrame()
 expected_mask_df.loc[:,'Channel-A'] = channel_A_mask
 expected_mask_df.loc[:,'Channel-B'] = channel_B_mask
