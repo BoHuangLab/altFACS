@@ -108,12 +108,12 @@ def processControl(control: pd.DataFrame, **kwargs):
     plt.show()
     
     #Load limit_dict. - Temporary
-    if limit_dict is None:
-        test_data_dir  = r"C:/Users/David Brown/Documents/PythonScripts_New/FACS/alternativeFACS/tests/"
-        test_data_name = "example_18bit_limit_dict.json"
+#     if limit_dict is None:
+#         test_data_dir  = r"C:/Users/David Brown/Documents/PythonScripts_New/FACS/alternativeFACS/tests/"
+#         test_data_name = "example_18bit_limit_dict.json"
 
-        with open(test_data_dir+test_data_name, 'r') as json_file:
-            limit_dict = json.load(json_file)
+#         with open(test_data_dir+test_data_name, 'r') as json_file:
+#             limit_dict = json.load(json_file)
         
     mask = tagSaturation(control, limit_dict, verbose=False)
     
