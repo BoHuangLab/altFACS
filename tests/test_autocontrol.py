@@ -34,11 +34,11 @@ test_limit_dict = {'564nm': {'upper_limit': 100, 'lower_limit': 0}}
 class TestAutocontrol(unittest.TestCase):
 
     def test_processControl(self):
-        # Run processControl with no kwargs
+        # Run processControl with limit_dict kwarg
         singlet_threshold, poly, event_gating, singlets = processControl(test_df, limit_dict=test_limit_dict)
         
         # Check event gating
-        self.assertTrue(event_gating.equals(expected_event_gating), "For this data set the events should match the expected gating.")
+        self.assertTrue((event_gating==expected_event_gating), "For this data set the events should match the expected gating.")
     
 # Test edge cases
 # There should be an error message if the upper and lower bounds are swapped by mistake
