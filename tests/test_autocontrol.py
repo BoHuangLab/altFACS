@@ -28,11 +28,14 @@ test_df.loc[:,'564nm']    = np.random.normal(50, 50, 1000) # Add a fluorescence 
 
 expected_event_gating = [1000, 676, 533, 506]
 
+# Generate test limit dictionary to mask saturation.
+test_limit_dict = {'564nm': {'upper_limit': 100, 'lower_limit': 0}}
+
 class TestAutocontrol(unittest.TestCase):
 
     def test_processControl(self):
         # Run processControl with no kwargs
-        singlet_threshold, poly, event_gating, singlets = processControl(test_df)
+        singlet_threshold, poly, event_gating, singlets = processControl(test_df, limit_dict=test_limit_dict)
         
         # Check event gating
         self.assertTrue(event_gating.equals(expected_event_gating), "For this data set the events should match the expected gating.")
