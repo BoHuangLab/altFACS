@@ -39,6 +39,23 @@ def transformFluorescenceChannels(df: pd.DataFrame, channels: list, transform, i
         return output
 
     
+def clean_transform(df):
+    '''
+    Exclude infinite or non-numeric values.
+    
+    Parameters:
+    df: pd.DataFrame
+    FACS data.
+    
+    Returns
+    df: pd.DataFrame
+    FACS data without rows containing nan, inf or -inf.
+    
+    '''
+    
+    return df[~df.isin([np.nan, np.inf, -np.inf]).any(1)]
+
+    
 def autothresholdChannel(df: pd.DataFrame, channel: str, **kwargs)->float:
     '''
     Determine a threshold of a channel by mean + n_stdevs * std or by a set percentile.
