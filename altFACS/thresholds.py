@@ -1,12 +1,14 @@
 import sys
 import numpy as np
 import pandas as pd
+from matplotlib import path
 
 def autothresholdChannel(data, channel, percentile=0.999)->float:
     '''
     Find the 99.9th percentile of a channel.
     '''
     return data[channel].quantile(percentile)
+
 
 def autothreshold(data, channels, percentile=0.999)->dict:
     '''threshold each channel in the list'''
@@ -17,7 +19,8 @@ def autothreshold(data, channels, percentile=0.999)->dict:
         thresholds_dict[channel] = autothresholdChannel(data, channel, percentile)
     
     return thresholds_dict
-    
+
+
 def channelGate(data, channels, thresholds_dict):
     '''Add boolean gates for each channel in the list
     based on a dictionary of thresholds.
@@ -34,6 +37,9 @@ def channelGate(data, channels, thresholds_dict):
 
 
 def poly_gate(df, x_channel, y_channel, poly, gate_name):
+    '''
+    Add a boolean column to df for x_channel, y_channel coordinates inside matplotlib Polygon.
+    '''
     
     coords = np.array(df[[x_channel, y_channel]])
 
